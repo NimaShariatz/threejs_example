@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import "./mainScene.css"
 
 
-import { OrbitControls, useGLTF, Html } from "@react-three/drei"
+import { OrbitControls, useGLTF, Html, Sparkles } from "@react-three/drei"
 
 import { Perf } from "r3f-perf"
 import { useThree } from '@react-three/fiber'
@@ -90,7 +90,7 @@ export default function MainScene({ sectionTracker, handle_setSectionTracker }: 
     if (sectionTracker.start && !sectionTracker.mountain_purple) {
 
 
-      const bgAudio = new Audio('/Macroblank - Glyph Chamber.m4a');
+      const bgAudio = new Audio('./Macroblank - Glyph Chamber.m4a');
       bgAudio.loop = true;
       bgAudio.volume = 0.7;
 
@@ -184,6 +184,15 @@ export default function MainScene({ sectionTracker, handle_setSectionTracker }: 
     >
         meshBasic mountain scene. Click to progress
     </Html>
+
+    <Sparkles
+      size={ 8 }
+        scale={ [ 60, 20, 1 ] } //x, y, z
+        position-y={ 20 }
+        speed={ 0.2 }
+        count={ 1000 }
+          
+      />
 
 
   </group>
