@@ -1,5 +1,6 @@
 {
   "name": "vite-project",
+  "homepage":"https://nimashariatz.github.io/threejs_example/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,12 +8,15 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@react-three/drei": "^9.114.3",
     "@react-three/fiber": "^8.18.0",
     "@react-three/postprocessing": "^2.16.3",
+    "gh-pages": "^6.3.0",
     "gsap": "^3.15.0",
     "r3f-perf": "^7.2.3",
     "react": "^18.3.1",
