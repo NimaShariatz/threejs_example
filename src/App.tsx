@@ -1,5 +1,7 @@
 
 import './App.css'
+import { Perf } from "r3f-perf"
+
 import { Canvas } from '@react-three/fiber'
 import {useState, useEffect } from 'react'
 import MountainScene from './Components/mainScene/mountainScene'
@@ -17,8 +19,9 @@ function App() {
     mountain_purple_complete: false,
     mountain_finished: false,
     moon_start: false,
+    moon_finish: false
   })
-  const handle_setSectionTracker = (sect: 'start' | 'mountain_purple' | 'mountain_purple_complete' | 'mountain_finished' | 'moon_start') => {
+  const handle_setSectionTracker = (sect: 'start' | 'mountain_purple' | 'mountain_purple_complete' | 'mountain_finished' | 'moon_start' | 'moon_finish') => {
     setSectionTracker(prev => ({ ...prev, [sect]: true }))
   }
 
@@ -26,11 +29,18 @@ function App() {
   //Listen for the Enter key press
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Enter' && !sectionTracker.mountain_purple_complete) {
-        handle_setSectionTracker('start');
-        setStartMusic(true)
-      }else if (event.key === 'Enter' && sectionTracker.mountain_purple_complete){
-        handle_setSectionTracker('mountain_finished');
+      //console.log(sectionTracker)
+      if (event.key === 'Enter') {
+        if(!sectionTracker.start){
+          handle_setSectionTracker('start');
+          setStartMusic(true)
+        }else if(sectionTracker.mountain_purple_complete && !sectionTracker.mountain_finished){
+          handle_setSectionTracker('mountain_finished');
+
+        }else if(sectionTracker.moon_start){
+          handle_setSectionTracker('moon_finish')
+        }
+
       }
     };
 
@@ -53,6 +63,8 @@ function App() {
   return (
     <>
     <div className='canvas_container'>
+
+
     <Canvas
       flat
       camera={ {
@@ -62,16 +74,24 @@ function App() {
         position: [ 5, 1.5, 15 ] //note: Z-axis is in and out. Y is up and down. X is side to side. Not the same as blender
       } }
     >
+      <Perf position="top-left" />
+
       <color args={ [ '#e9dbc3' ] } attach="background" />
-      <MountainScene 
-        sectionTracker={sectionTracker} 
-        handle_setSectionTracker={handle_setSectionTracker} 
-      />
+
+
+      
       <MoonScene
         sectionTracker={sectionTracker} 
         handle_setSectionTracker={handle_setSectionTracker} 
       />
-        
+
+
+      {!sectionTracker.moon_start && 
+      <MountainScene 
+        sectionTracker={sectionTracker} 
+        handle_setSectionTracker={handle_setSectionTracker} 
+      />
+      }
     </Canvas>
     </div>
     </>

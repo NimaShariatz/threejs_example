@@ -6,7 +6,6 @@ import { useGLTF, Html } from "@react-three/drei"
 //import { OrbitControls } from "@react-three/drei"
 
 
-import { Perf } from "r3f-perf"
 import { useThree } from '@react-three/fiber'
 //import { useFrame } from '@react-three/fiber'
 
@@ -159,7 +158,6 @@ export default function MountainScene({ sectionTracker, handle_setSectionTracker
 
   return(
   <>
-  <Perf position="top-left" />
   {/*<OrbitControls makeDefault />*/}
   
 

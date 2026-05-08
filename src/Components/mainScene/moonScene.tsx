@@ -16,13 +16,13 @@ function AnimatedStar({ startX, startY, speedX, speedY, resetX }: { startX: numb
   const starRef = useRef<THREE.Mesh>(null);
   const [resetKey, setResetKey] = useState(0);
 
-  useFrame((state, delta) => {
+  useFrame((_state, delta) => { //normally it is "state", but we did "_state" to tell TypeScript that it is being intentionally ignored. so npm run deploy works now
     if (starRef.current) {
       if (starRef.current.position.x < resetX) {
         // This triggers a remount. The old Trail is destroyed, and a new one 
         // spawns instantly at [startX, startY, 0] with no streak!
         setResetKey((prev) => prev + 1); 
-        console.log(state)
+        //console.log(state)
       } else {
         starRef.current.position.x -= delta * speedX;
         starRef.current.position.y -= delta * speedY;
@@ -63,12 +63,14 @@ function AnimatedStar({ startX, startY, speedX, speedY, resetX }: { startX: numb
 
 interface MoonSceneProps {
   sectionTracker: {
-    mountain_finished: boolean
-    moon_start: boolean;
     mountain_purple_complete: boolean;
+    mountain_finished: boolean;
+    moon_start: boolean;
+    moon_finish: boolean;
+    
     
   };
-  handle_setSectionTracker: (sect: 'mountain_purple_complete' | 'mountain_finished' | 'moon_start') => void;
+  handle_setSectionTracker: (sect: 'mountain_purple_complete' | 'mountain_finished' | 'moon_start' | 'moon_finish') => void;
 }
 
 
@@ -78,7 +80,7 @@ interface MoonSceneProps {
 export default function MoonScene({ sectionTracker, handle_setSectionTracker }: MoonSceneProps)
 {
   const { camera, scene } = useThree();
-  console.log("asd")
+
   useEffect(() => {
 
     if(sectionTracker.mountain_finished){
@@ -124,12 +126,12 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
   }, [sectionTracker.mountain_finished, handle_setSectionTracker, camera, scene])
 
 
+  useEffect(() => {
+    //Make the background transition to white. Then jump to different cords for next scene. unmount this component too
+  }, [sectionTracker.moon_finish])
 
 
   
-
-
-
 
 
 
@@ -157,7 +159,6 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
       <AnimatedStar startX={200} startY={30} speedX={80} speedY={9} resetX={-200} />
       <AnimatedStar startX={300} startY={28} speedX={80} speedY={7} resetX={-320} />
       <AnimatedStar startX={350} startY={28} speedX={50} speedY={5} resetX={-320} />
-
 
 
 
