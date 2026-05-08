@@ -22,6 +22,7 @@ function AnimatedStar({ startX, startY, speedX, speedY, resetX }: { startX: numb
         // This triggers a remount. The old Trail is destroyed, and a new one 
         // spawns instantly at [startX, startY, 0] with no streak!
         setResetKey((prev) => prev + 1); 
+        console.log(state)
       } else {
         starRef.current.position.x -= delta * speedX;
         starRef.current.position.y -= delta * speedY;
