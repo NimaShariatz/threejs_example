@@ -2,14 +2,19 @@
 
 
 .text_in_scene > div{
-      font-family: Helvetica, Arial;
-    position: absolute;
-    background: #00000009;
-    color: white;
-    font-weight: 800;
-    padding: 15px;
-    white-space: nowrap;
-    overflow: hidden;
-    border-radius: 5px;
-    user-select: none;
+  font-family: Helvetica, Arial;
+  position: absolute;
+  background: #00000020;
+  color: white;
+  font-weight: 800;
+  padding: 15px;
+  /*white-space: nowrap;
+  overflow: hidden;*/
+
+  width: 500px;
+  border-radius: 5px;
+  user-select: none;
+}
+.text_in_scene > div small{
+  color: greenyellow;
 }

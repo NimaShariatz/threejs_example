@@ -2,7 +2,9 @@ import { useEffect, useRef } from 'react'
 import "./mainScene.css"
 
 
-import { OrbitControls, useGLTF, Html, Sparkles } from "@react-three/drei"
+import { useGLTF, Html } from "@react-three/drei"
+//import { OrbitControls } from "@react-three/drei"
+
 
 import { Perf } from "r3f-perf"
 import { useThree } from '@react-three/fiber'
@@ -12,13 +14,12 @@ import * as THREE from 'three'
 
 import gsap from 'gsap' // Import GSAP
 
-//import { EffectComposer, HueSaturation } from '@react-three/postprocessing' //npm install @react-three/postprocessing@3.0
 
 
 
 
 
-interface mainSceneProps {
+interface MountainSceneProps {
   sectionTracker: {
     start: boolean,
     mountain_purple: boolean,
@@ -35,7 +36,7 @@ interface mainSceneProps {
 
 
 
-export default function MainScene({ sectionTracker, handle_setSectionTracker }: mainSceneProps)
+export default function MountainScene({ sectionTracker, handle_setSectionTracker }: MountainSceneProps)
 {
 
   const mountains_ref = useRef<THREE.Group>(null!)//just for the Drei <Html/> text
@@ -89,13 +90,6 @@ export default function MainScene({ sectionTracker, handle_setSectionTracker }: 
     // START ANIMATION
     if (sectionTracker.start && !sectionTracker.mountain_purple) {
 
-
-      const bgAudio = new Audio('./Macroblank - Glyph Chamber.m4a');
-      bgAudio.loop = true;
-      bgAudio.volume = 0.7;
-
-      bgAudio.play()
-
       gsap.to(camera.position, {
         x: 0,
         y: 0,
@@ -103,6 +97,12 @@ export default function MainScene({ sectionTracker, handle_setSectionTracker }: 
         duration: 3.5,
         delay: 0.5,
         ease: "power1.inOut",
+        onUpdate: () => {
+          // Continuously point the camera at the mountain's coordinates as it moves
+          //camera.lookAt(mountains_ref.current.position);
+          camera.lookAt(0, 0, 0);
+
+        },
         onComplete: () => {
           handle_setSectionTracker('mountain_purple'); // triggers color change upon animation finishing
         }
@@ -117,7 +117,7 @@ export default function MainScene({ sectionTracker, handle_setSectionTracker }: 
           r: targetBgColor.r,
           g: targetBgColor.g,
           b: targetBgColor.b,
-          duration: 2,
+          duration: 1,
           ease: 'power1.in'
         });
       }
@@ -139,7 +139,7 @@ export default function MainScene({ sectionTracker, handle_setSectionTracker }: 
               r: targetColor.r,
               g: targetColor.g,
               b: targetColor.b,
-              duration: 2,
+              duration: 1,
               ease: 'power1.in',
               onComplete: () => {
                 if (mesh.name === 'mountain_1') {
@@ -151,7 +151,7 @@ export default function MainScene({ sectionTracker, handle_setSectionTracker }: 
         }
       });
     }
-  }, [mountains, scene, sectionTracker.start, sectionTracker.mountain_purple, sectionTracker.mountain_purple_complete, camera.position, handle_setSectionTracker]);
+  }, [mountains, scene, sectionTracker.start, sectionTracker.mountain_purple, sectionTracker.mountain_purple_complete, camera, handle_setSectionTracker]);
 
 
 
@@ -160,15 +160,11 @@ export default function MainScene({ sectionTracker, handle_setSectionTracker }: 
   return(
   <>
   <Perf position="top-left" />
-  <OrbitControls makeDefault />
+  {/*<OrbitControls makeDefault />*/}
   
 
   {/* results in a performance hit. multisampling is anti-aliasing. should keep to 0. max is 8 */}
-  {/* 
-  <EffectComposer multisampling={ 0 }>
-    <HueSaturation saturation={ -1 } />
-  </EffectComposer>
-  */}
+
 
   <group ref={ mountains_ref } position-z={-10} position-x={4} position-y={-2}>
     <primitive
@@ -176,27 +172,17 @@ export default function MainScene({ sectionTracker, handle_setSectionTracker }: 
       scale = { 1.2 }
     />
     <Html
-      position={ [ 0, 3, 15 ] }
-      wrapperClass="text_in_scene" //Classname for mainScene.css
+      position={ [ -2, 3, 15 ] }
+      wrapperClass="text_in_scene" //Classname for MountainScene.css
       center
       distanceFactor={ 5 } //size
       occlude={ [ mountains_ref ] } //text dissappears when covered by object
     >
-        meshBasic mountain scene. Click to progress
+        meshBasic mountain scene with a Blender model of mountains. Color and camera movement done in code.<br/><small>press 'Enter' to progress</small>
     </Html>
 
-    <Sparkles
-      size={ 8 }
-        scale={ [ 60, 20, 1 ] } //x, y, z
-        position-y={ 20 }
-        speed={ 0.2 }
-        count={ 1000 }
-          
-      />
-
-
   </group>
-        
+      
         
 
   
