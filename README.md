@@ -44,62 +44,79 @@ npm install @react-three/postprocessing
 see docs: https://react-postprocessing.docs.pmnd.rs/effects/autofocus
 
 
+Mountains:
 
-Plan:
-
-start by making the same mountain scene and intro as Yume. To move up, click.
-
-Then the moon. Moon can be meshBasic using the postprocessing library and use the <Bloom/>. See Project58! 46:40. We use <sparkles/> for the start effect. see if we can animate the color of each in and out to make a subtle flicker. Maybe add star streakes if possible.
-
-next click the whole thing goes black. Then zoom out. we are zooming out of the pupil! A circular eye with a similar effect to chartogne taillet.
-
-click again and camera goes into the pupil. spotlight to the left, maybe from drei. cubes float like water. Veines in the background light up like the moon.
-END
+We used alot of gsap for color stuff. We used camera.lookAt(0, 0, 0); at the first camera movement
+so it always looked at that point
 
 
 
+Moon:
+
+For camera movement, I did both movement and a 20deg rotation upwards. Not necassary, but just for example purposes.
+
+we used a function for the stars as I wanted them destroyed. The reason being that when they are moved again to the starting point, their trail flashes back as well which makes it look like a meteor going the opposite direction. 
+
+--------------otherwise it would just be ---------------
+
+  const star1 = useRef<THREE.Mesh>(null);
+  const star2 = useRef<THREE.Mesh>(null);
 
 
 
+  useFrame((state, delta) =>
+  {
+    if(star1.current){
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  useEffect(() => {
-    mountains.scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        const mesh = child as THREE.Mesh;
-        const prevMaterial = mesh.material as THREE.MeshStandardMaterial;
-        let meshColor = prevMaterial.color;
-
-        if (mesh.name === 'mountain_1') {
-          meshColor = new THREE.Color('#7178E7');
-        } else if (mesh.name === 'mountain_2') {
-          meshColor = new THREE.Color('#7c82d8');
-        } else if (mesh.name === 'mountain_3') {
-          meshColor = new THREE.Color('#9298df');
-        } else if (mesh.name === 'mountain_4') {
-          meshColor = new THREE.Color('#a3a8e6');
-        } else if (mesh.name === 'mountain_5') {
-          meshColor = new THREE.Color('#b8bbe9');
-        }
-        
-        mesh.material = new THREE.MeshBasicMaterial({
-          map: prevMaterial.map,
-          color: meshColor
-        });
+      if(star1.current.position.x < -200){
+        star1.current.position.x = 200
+        star1.current.position.y = 30
+      } else {
+        star1.current.position.x -= delta * 80
+        star1.current.position.y -= delta * 9
       }
-    });
-  }, [mountains.scene]);
+        
+    }
+
+    if(star2.current){
+
+      if(star2.current.position.x < -320){
+        star2.current.position.x = 300
+        star2.current.position.y = 28
+      } else {
+        star2.current.position.x -= delta * 80
+        star2.current.position.y -= delta * 7
+      }
+        
+    }
+
+  })
+
+
+
+
+
+      <Trail
+        width={6}          // Width of the line
+        length={15}           // Length of the trail
+        color={"white"} // Match the star's color
+        attenuation={(t) => t * t} // Make it taper off at the end
+      >
+        <mesh ref={star1} position-y={ 0 } position-z={ 0 } scale={ 0.1 }> {/* z makes it behind the moon */}
+            <sphereGeometry />
+            <meshBasicMaterial color={"white"} toneMapped={false} />
+        </mesh>
+      </Trail>
+
+
+      <Trail
+        width={6}          // Width of the line
+        length={15}           // Length of the trail
+        color={"white"} // Match the star's color
+        attenuation={(t) => t * t} // Make it taper off at the end
+      >
+        <mesh ref={star2} position-y={ 0 } position-z={ 0 } scale={ 0.1 }> {/* z makes it behind the moon */}
+            <sphereGeometry />
+            <meshBasicMaterial color={"white"} toneMapped={false} />
+        </mesh>
+      </Trail>

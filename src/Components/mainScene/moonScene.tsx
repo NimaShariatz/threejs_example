@@ -1,9 +1,64 @@
-import {Sparkles, Stars} from "@react-three/drei"
+import {Sparkles, Trail} from "@react-three/drei"
 import gsap from 'gsap'
-import { useEffect, useRef} from 'react'
-import { useThree } from '@react-three/fiber'
+import { useEffect, useState, useRef} from 'react'
+import { useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
+
+
+
+
+
+
+
+
+function AnimatedStar({ startX, startY, speedX, speedY, resetX }: { startX: number, startY: number, speedX: number, speedY: number, resetX: number }) {
+  const starRef = useRef<THREE.Mesh>(null);
+  const [resetKey, setResetKey] = useState(0);
+
+  useFrame((state, delta) => {
+    if (starRef.current) {
+      if (starRef.current.position.x < resetX) {
+        // This triggers a remount. The old Trail is destroyed, and a new one 
+        // spawns instantly at [startX, startY, 0] with no streak!
+        setResetKey((prev) => prev + 1); 
+      } else {
+        starRef.current.position.x -= delta * speedX;
+        starRef.current.position.y -= delta * speedY;
+      }
+    }
+  });
+
+  return (
+    <Trail
+      key={resetKey} // <-- The key remounts the component
+      width={6}
+      length={15}
+      color={"white"}
+      attenuation={(t) => t * t}
+    >
+      <mesh ref={starRef} position={[startX, startY, 0]} scale={0.1}>
+        <sphereGeometry />
+        <meshBasicMaterial color={"white"} toneMapped={false} />
+      </mesh>
+    </Trail>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 interface MoonSceneProps {
   sectionTracker: {
@@ -18,12 +73,11 @@ interface MoonSceneProps {
 
 
 
+
 export default function MoonScene({ sectionTracker, handle_setSectionTracker }: MoonSceneProps)
 {
   const { camera, scene } = useThree();
-  const sparklesRef = useRef<THREE.Points>(null!); // 1. Create a ref for the sparkles
-
-
+  console.log("asd")
   useEffect(() => {
 
     if(sectionTracker.mountain_finished){
@@ -71,25 +125,40 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
 
 
 
+  
+
+
+
+
+
+
 
   return(
   <>
     <group position-z={-10} position-x={0} position-y={23}>
-      <Sparkles ref={sparklesRef} 
-        size={ 10 }
+      <Sparkles 
+       
+        size={ 15 }
         scale={ [ 55, 20, -1 ] } //x, y, z
         speed={ 0 }
-        color={ "#ffffff" }
+        color={ "#fff" }
         count={ 50 }
         opacity={1}
       />
 
-    <Stars radius={2} depth={4} count={50} factor={2} saturation={0} fade speed={0.5} />
+
 
       <mesh position-y={ 3 } position-z={ 5 } scale={ 1.5 }>
           <sphereGeometry />
           <meshBasicMaterial color={[1.2, 1.1, 2.3]} toneMapped={false} />{/* Turn off tone mapping and boost the color over 1 so the bloom picks it up */}
       </mesh>
+
+      <AnimatedStar startX={200} startY={30} speedX={80} speedY={9} resetX={-200} />
+      <AnimatedStar startX={300} startY={28} speedX={80} speedY={7} resetX={-320} />
+      <AnimatedStar startX={350} startY={28} speedX={50} speedY={5} resetX={-320} />
+
+
+
 
     </group>
 
@@ -97,8 +166,7 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
     <EffectComposer>
       <Bloom 
         luminanceThreshold={1.1}//anything with an rgb beyond 1
-        intensity={1.3}
-        luminanceSmoothing={0.3}
+        intensity={0.8}
         mipmapBlur
       />
     </EffectComposer>
