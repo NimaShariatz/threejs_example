@@ -95,7 +95,7 @@ export default function MountainScene({ sectionTracker, handle_setSectionTracker
         y: 0,
         z: 15,
         duration: 3.5,
-        delay: 0.5,
+        delay: 0.8,
         ease: "power1.inOut",
         onUpdate: () => {
           // Continuously point the camera at the mountain's coordinates as it moves
