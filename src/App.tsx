@@ -6,6 +6,7 @@ import { Canvas } from '@react-three/fiber'
 import {useState, useEffect } from 'react'
 import MountainScene from './Components/mainScene/mountainScene'
 import MoonScene from './Components/mainScene/moonScene'
+import TreeScene from './Components/mainScene/treeScene'
 
 
 
@@ -19,9 +20,10 @@ function App() {
     mountain_purple_complete: false,
     mountain_finished: false,
     moon_start: false,
-    moon_finish: false
+    moon_finish: false,
+    tree_start: false,
   })
-  const handle_setSectionTracker = (sect: 'start' | 'mountain_purple' | 'mountain_purple_complete' | 'mountain_finished' | 'moon_start' | 'moon_finish') => {
+  const handle_setSectionTracker = (sect: 'start' | 'mountain_purple' | 'mountain_purple_complete' | 'mountain_finished' | 'moon_start' | 'moon_finish' | 'tree_start') => {
     setSectionTracker(prev => ({ ...prev, [sect]: true }))
   }
 
@@ -37,10 +39,9 @@ function App() {
         }else if(sectionTracker.mountain_purple_complete && !sectionTracker.mountain_finished){
           handle_setSectionTracker('mountain_finished');
 
-        }else if(sectionTracker.moon_start){
+        }else if(sectionTracker.moon_start && !sectionTracker.moon_finish){
           handle_setSectionTracker('moon_finish')
         }
-
       }
     };
 
@@ -80,18 +81,31 @@ function App() {
 
 
       
-      <MoonScene
-        sectionTracker={sectionTracker} 
-        handle_setSectionTracker={handle_setSectionTracker} 
-      />
+
 
 
       {!sectionTracker.moon_start && 
-      <MountainScene 
-        sectionTracker={sectionTracker} 
-        handle_setSectionTracker={handle_setSectionTracker} 
-      />
+        <MountainScene 
+          sectionTracker={sectionTracker} 
+          handle_setSectionTracker={handle_setSectionTracker} 
+        />
       }
+
+      {!sectionTracker.tree_start && 
+        <MoonScene
+          sectionTracker={sectionTracker} 
+          handle_setSectionTracker={handle_setSectionTracker} 
+        />
+      }
+
+
+      {sectionTracker.moon_finish &&
+        <TreeScene
+          sectionTracker={sectionTracker} 
+          handle_setSectionTracker={handle_setSectionTracker} 
+        />
+      }
+      
     </Canvas>
     </div>
     </>

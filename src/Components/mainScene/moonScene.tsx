@@ -1,59 +1,11 @@
-import {Sparkles, Trail} from "@react-three/drei"
+import {Sparkles} from "@react-three/drei"
 import gsap from 'gsap'
-import { useEffect, useState, useRef} from 'react'
-import { useThree, useFrame } from '@react-three/fiber'
+import { useEffect} from 'react'
+import { useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
-
-
-
-
-
-
-
-function AnimatedStar({ startX, startY, speedX, speedY, resetX }: { startX: number, startY: number, speedX: number, speedY: number, resetX: number }) {
-  const starRef = useRef<THREE.Mesh>(null);
-  const [resetKey, setResetKey] = useState(0);
-
-  useFrame((_state, delta) => { //normally it is "state", but we did "_state" to tell TypeScript that it is being intentionally ignored. so npm run deploy works now
-    if (starRef.current) {
-      if (starRef.current.position.x < resetX) {
-        // This triggers a remount. The old Trail is destroyed, and a new one 
-        // spawns instantly at [startX, startY, 0] with no streak!
-        setResetKey((prev) => prev + 1); 
-        //console.log(state)
-      } else {
-        starRef.current.position.x -= delta * speedX;
-        starRef.current.position.y -= delta * speedY;
-      }
-    }
-  });
-
-  return (
-    <Trail
-      key={resetKey} // <-- The key remounts the component
-      width={6}
-      length={15}
-      color={"white"}
-      attenuation={(t) => t * t}
-    >
-      <mesh ref={starRef} position={[startX, startY, 0]} scale={0.1}>
-        <sphereGeometry />
-        <meshBasicMaterial color={"white"} toneMapped={false} />
-      </mesh>
-    </Trail>
-  );
-}
-
-
-
-
-
-
-
-
-
+import AnimatedStar from '../stars/stars'
 
 
 
@@ -83,7 +35,7 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
 
   useEffect(() => {
 
-    if(sectionTracker.mountain_finished){
+    if(sectionTracker.mountain_finished && !sectionTracker.moon_start){
       // Animate Position
       gsap.to(camera.position, {
         x: 0,
@@ -117,18 +69,15 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
           delay: 0.7,
           ease: 'power4.inOut'
         });
-      }
 
+      }
+      
   
     }
 
 
-  }, [sectionTracker.mountain_finished, handle_setSectionTracker, camera, scene])
+  }, [sectionTracker.mountain_finished, sectionTracker.moon_start, handle_setSectionTracker, camera, scene])
 
-
-  useEffect(() => {
-    //Make the background transition to white. Then jump to different cords for next scene. unmount this component too
-  }, [sectionTracker.moon_finish])
 
 
   
@@ -151,7 +100,7 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
 
 
 
-      <mesh position-y={ 3 } position-z={ 5 } scale={ 1.5 }>
+      <mesh position-x={5} position-y={ 3 } position-z={ 5 } scale={ 1.5 }>
           <sphereGeometry />
           <meshBasicMaterial color={[1.2, 1.1, 2.3]} toneMapped={false} />{/* Turn off tone mapping and boost the color over 1 so the bloom picks it up */}
       </mesh>

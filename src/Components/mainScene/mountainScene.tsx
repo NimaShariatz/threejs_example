@@ -176,7 +176,10 @@ export default function MountainScene({ sectionTracker, handle_setSectionTracker
       distanceFactor={ 5 } //size
       occlude={ [ mountains_ref ] } //text dissappears when covered by object
     >
-        meshBasic mountain scene with a Blender model of mountains. Color and camera movement done in code.<br/><small>press 'Enter' to progress</small>
+        A series of meshBasic scenes making use of GSAP for camera and color changes. useFrame() for object movement. The only blender model used 
+        is the mountains.<br/>
+        
+        <small>press 'Enter' to progress</small>
     </Html>
 
   </group>
