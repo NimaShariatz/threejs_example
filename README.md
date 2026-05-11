@@ -6,12 +6,12 @@ libraries have been updated for 19. Notably React-Perf GPUms stops working. stuc
 
 
 Library installs:
-npm install three
+npm install three@0.169.0
 npm install @react-three/fiber
 npm install @react-three/drei
 npm install r3f-perf
 
-1 - three: The core Three.js library.
+1 - three: The core Three.js library. 0.169 otherwise you get a warning about THREE.Clock being depracted and to use THREE.Timer instead. This is because the React three fiber team didnt update something on their end yet. we go with 0.169 just to not see the warning.
 2 - @react-three/fiber: The React renderer for Three.js.
 3 - @react-three/drei: A useful collection of abstractions and helpers for React Three Fiber.
 4 - r3f-perf: A performance monitor for React Three Fiber. if you get warnings you can ignore them. its because this libarry was made with react 18, but we are on 19. it should still be fine.

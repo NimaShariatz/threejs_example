@@ -1,6 +1,6 @@
 {
   "name": "vite-project",
-  "homepage":"https://nimashariatz.github.io/threejs_example/",
+  "homepage": "https://nimashariatz.github.io/threejs_example/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -21,7 +21,7 @@
     "r3f-perf": "^7.2.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "three": "^0.184.0"
+    "three": "^0.169.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

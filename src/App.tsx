@@ -6,7 +6,7 @@ import { Canvas } from '@react-three/fiber'
 import {useState, useEffect } from 'react'
 import MountainScene from './Components/mainScene/mountainScene'
 import MoonScene from './Components/mainScene/moonScene'
-import TreeScene from './Components/mainScene/treeScene'
+import CarScene from './Components/mainScene/CarScene'
 
 
 
@@ -21,9 +21,9 @@ function App() {
     mountain_finished: false,
     moon_start: false,
     moon_finish: false,
-    tree_start: false,
+    car_start: false,
   })
-  const handle_setSectionTracker = (sect: 'start' | 'mountain_purple' | 'mountain_purple_complete' | 'mountain_finished' | 'moon_start' | 'moon_finish' | 'tree_start') => {
+  const handle_setSectionTracker = (sect: 'start' | 'mountain_purple' | 'mountain_purple_complete' | 'mountain_finished' | 'moon_start' | 'moon_finish' | 'car_start') => {
     setSectionTracker(prev => ({ ...prev, [sect]: true }))
   }
 
@@ -57,7 +57,7 @@ function App() {
   useEffect(() =>{
       const bgAudio = new Audio('./Macroblank - Glyph Chamber.m4a');
       bgAudio.loop = true;
-      bgAudio.volume = 0.7;
+      bgAudio.volume = 0.3;
       bgAudio.play()
   }, [startMusic])
 
@@ -91,7 +91,7 @@ function App() {
         />
       }
 
-      {!sectionTracker.tree_start && 
+      {!sectionTracker.car_start && 
         <MoonScene
           sectionTracker={sectionTracker} 
           handle_setSectionTracker={handle_setSectionTracker} 
@@ -100,7 +100,7 @@ function App() {
 
 
       {sectionTracker.moon_finish &&
-        <TreeScene
+        <CarScene
           sectionTracker={sectionTracker} 
           handle_setSectionTracker={handle_setSectionTracker} 
         />

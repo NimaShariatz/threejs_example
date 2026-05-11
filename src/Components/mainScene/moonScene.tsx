@@ -39,7 +39,7 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
       // Animate Position
       gsap.to(camera.position, {
         x: 0,
-        y: 10,
+        y: 15,
         z: 25,
         duration: 3,
         delay: 0.5,
@@ -87,11 +87,11 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
 
   return(
   <>
-    <group position-z={-10} position-x={0} position-y={23}>
+    <group position-z={-10} position-x={0} position-y={29}>
       <Sparkles 
        
         size={ 15 }
-        scale={ [ 55, 20, -1 ] } //x, y, z
+        scale={ [ 55, 23, -1 ] } //x, y, z
         speed={ 0 }
         color={ "#fff" }
         count={ 50 }
@@ -100,7 +100,7 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
 
 
 
-      <mesh position-x={5} position-y={ 3 } position-z={ 5 } scale={ 1.5 }>
+      <mesh position-x={7} position-y={ 3 } position-z={ 5 } scale={ 1.5 }>
           <sphereGeometry />
           <meshBasicMaterial color={[1.2, 1.1, 2.3]} toneMapped={false} />{/* Turn off tone mapping and boost the color over 1 so the bloom picks it up */}
       </mesh>
