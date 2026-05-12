@@ -22,8 +22,9 @@ function App() {
     moon_start: false,
     moon_finish: false,
     car_start: false,
+    car_changeScene: false
   })
-  const handle_setSectionTracker = (sect: 'start' | 'mountain_purple' | 'mountain_purple_complete' | 'mountain_finished' | 'moon_start' | 'moon_finish' | 'car_start') => {
+  const handle_setSectionTracker = (sect: 'start' | 'mountain_purple' | 'mountain_purple_complete' | 'mountain_finished' | 'moon_start' | 'moon_finish' | 'car_start' | 'car_changeScene') => {
     setSectionTracker(prev => ({ ...prev, [sect]: true }))
   }
 
@@ -41,6 +42,8 @@ function App() {
 
         }else if(sectionTracker.moon_start && !sectionTracker.moon_finish){
           handle_setSectionTracker('moon_finish')
+        }else if(sectionTracker.moon_finish && !sectionTracker.car_changeScene){
+          handle_setSectionTracker('car_changeScene')
         }
       }
     };
