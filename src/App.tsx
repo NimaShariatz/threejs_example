@@ -70,7 +70,15 @@ function App() {
 
 
     <Canvas
-      flat
+      //flat
+      // ^^ optional. change to the render's tonemapping. makes the colors more flat. Does have an effect on both meshBasic and meshStandard! 
+      //on meshStandard, the colors pop much more without flat.
+      //on meshbasic, the colors pop much more with flat. Noticable on the CarScente.tsx.
+      /*Note: the usage of flat does not effect mountaints.glb because we are directly assigning hex value colors. so the use of 
+       flat does not change it in any way. Where for say carsScene.tsx/Day1_013 (rendered in meshBasic), we are using the model colors which do get effected */
+
+      //TLDR: unless you are assigning the color of an object by code, flat will effect the colors of the model regardless of mesh type.
+      
       camera={ {
         fov: 40,
         near: 0.1,

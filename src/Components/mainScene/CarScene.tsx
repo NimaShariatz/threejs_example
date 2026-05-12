@@ -204,7 +204,7 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
       ref={ambiLightRef}
       position={[-2.5, 20, 0.8]} 
       intensity={20}
-      color={"#171719"} 
+      color={"#171719"} /* crank the color up to the extreme for some funnyness!! */
       /> {/* no usehelp on this one */}
 
 
