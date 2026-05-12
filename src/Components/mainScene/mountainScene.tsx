@@ -176,8 +176,8 @@ export default function MountainScene({ sectionTracker, handle_setSectionTracker
       distanceFactor={ 5 } //size
       occlude={ [ mountains_ref ] } //text dissappears when covered by object
     >
-        A series of meshBasic scenes making use of GSAP for camera and color changes. useFrame() for object movement. The only blender model used 
-        is the mountains.<br/>
+        A series of meshBasic scenes making use of GSAP for camera and color changes. useFrame() for object movement. The only blender models used 
+        is the mountains, the vehicle + road, and the complete Day 1 Blender scene.<br/>
         
         <small>press 'Enter' to progress</small>
     </Html>
