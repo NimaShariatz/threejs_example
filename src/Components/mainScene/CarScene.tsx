@@ -31,7 +31,7 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
 
   const car_scene = useGLTF('./carscene_Dracco.glb')
   
-  const Day13_scene = useGLTF('./Day1_013.glb')
+  const Day13_scene = useGLTF('./Day1_013_compressed.glb')
   
 
   const pointLightRef = useRef<THREE.PointLight>(null!);
@@ -94,6 +94,24 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
 
 
     if(sectionTracker.car_changeScene){
+      /*
+      Day13_scene.scene.traverse((child) => { //converts to meshBasic
+        if ((child as THREE.Mesh).isMesh) {
+          const mesh = child as THREE.Mesh;
+          if (mesh.material) {
+            const sourceMaterial = mesh.material as THREE.Material & {
+              map?: THREE.Texture;
+              color?: THREE.Color | string | number;
+            };
+            mesh.material = new THREE.MeshBasicMaterial({
+              map: sourceMaterial.map, // preserve texture
+              color: sourceMaterial.color ?? 0xffffff
+            });
+          }
+        }
+      });
+      
+      */
 
 
       if (scene.background instanceof THREE.Color) {
