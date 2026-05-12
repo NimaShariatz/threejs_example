@@ -6,7 +6,7 @@ import { Canvas } from '@react-three/fiber'
 import {useState, useEffect } from 'react'
 import MountainScene from './Components/mainScene/mountainScene'
 import MoonScene from './Components/mainScene/moonScene'
-import CarScene from './Components/mainScene/CarScene'
+import CarScene from './Components/mainScene/carScene'
 
 
 
