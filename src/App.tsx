@@ -79,19 +79,19 @@ function App() {
 
       //TLDR: unless you are assigning the color of an object by code, flat will effect the colors of the model regardless of mesh type.
       
+      //orthographic
+      //makes camera orthographic
+
       camera={ {
         fov: 40,
         near: 0.1,
         far: 110,
-        position: [ 5, 1.5, 15 ] //note: Z-axis is in and out. Y is up and down. X is side to side. Not the same as blender
+        position: [ 5, 1.5, 15 ] //note: Z-axis is in and out. Y is up and down. X is side to side. Not the same as blender    
       } }
     >
       <Perf position="top-left" />
 
       <color args={ [ '#e9dbc3' ] } attach="background" />
-
-
-      
 
 
 
