@@ -85,7 +85,7 @@ function App() {
       camera={ {
         fov: 40,
         near: 0.1,
-        far: 110,
+        far: 110, //anything beyond 110 distance will not be rendered, saving performanceW
         position: [ 5, 1.5, 15 ] //note: Z-axis is in and out. Y is up and down. X is side to side. Not the same as blender    
       } }
     >
@@ -94,6 +94,13 @@ function App() {
       <color args={ [ '#e9dbc3' ] } attach="background" />
 
 
+
+      {/* -- Conditional rendering --
+        The benefit is that it saves on memory(RAM/VRAM) and some FPS. However there is a sudden fps drop because  
+        the CPU has to garbage collect, recompile shaders (for lights), and pass heavy geometry/texture data back across the bridge to the GPU.
+        So there is pros and cons. Also removing and adding light sources (carScene.tsx) makes it even worse. So adding 
+        some sort of transition between scenes helps hide that.      
+      */}
 
       {!sectionTracker.moon_start && 
         <MountainScene 

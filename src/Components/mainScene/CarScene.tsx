@@ -182,15 +182,24 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
           scale={0.5}
           visible={sectionTracker.car_start && !sectionTracker.car_changeScene}
           /*
-            unmounting a <primitive/> can trigger cleanup and disposal functions for 
-            the model's materials and geometries.
+          we CAN conditionally render both <primitive/> which saves on ram/vram.
+          But the browser has to take the geometry and texture data and push it back to the GPU. This is an expensive operation and will almost always cause a noticeable frame drop or "hitch" exactly when the model appears.
+          Also if you simultaneously mount and unmount <primitve/>s, it can overwhelm the 
+          WebGL pipeline giving you a "THREE.WebGLRenderer: Context Lost" error.
 
-            The problem is that if you render both <primitive/> conditionally, a simultaneous unmount and mount
-            occurs which overwhelms WebGL. You'll get a "THREE.WebGLRenderer: Context Lost" message in the browser console.
+          In App.tsx, saving on ram is worthwhile given we have scene transitions to hide somewhat it. 
+          But not here. So playing with visibility is better than conditionally rendering it.
+          The stutter isn't acceptable here.
 
-            so we use visibility instead.
+          turning off visiblity does save FPS as ThreeJS knows not to include it in its light source calculations during render. Just not the ram/vram.
 
-            in app.tsx the conditonal rendering is fine because the components are not mounting/unmounting simultaniously. There is time between them.
+          TL:DR
+          Visibility - saves FPS - no lag on change
+          Conditional Rendering - saves FPS and ram/vram - can cause a stutter as models, light sources are removed and added
+          
+          PS: destroying light sources is ESPECIALLY bad in terms of FPS loss.
+          When you add or remove a light source, Three.js has to recompile the shader programs for all materials currently in the scene to accommodate the new lighting setup.
+          Do not remove light sources unless you need to unmount an entire scene. Otherwise just set visibility or intensity to 0.
           */
       
         />
@@ -236,7 +245,7 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
       position={[-2.5, 20, 0.8]} 
       intensity={20}
       color={"#171719"} /* crank the color up to the extreme for some funnyness!! */
-      /> {/* no usehelp on this one */}
+      /> {/* no usehelp() from Drei on this one */}
 
 
       <spotLight 
@@ -245,7 +254,7 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
         intensity={100} 
         angle={Math.PI/6}
         color={"#e4c640"} 
-        visible={!sectionTracker.car_changeScene}//DO NOT DESTROY LIGHT SOURCES! bad for performance.
+        visible={!sectionTracker.car_changeScene}//Makes it dissappear. intensity=0 does the same. When an object or light is set to hidden, the Three.js renderer completely skips it during the render loop. Good for FPS.
         >
         <object3D attach="target" position={[0, -5, -3]} />{/* The spotlight will point directly at this position */}
       </spotLight>
