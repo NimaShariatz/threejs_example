@@ -170,15 +170,20 @@ export default function MountainScene({ sectionTracker, handle_setSectionTracker
       scale = { 1.2 }
     />
     <Html
-      position={ [ -2, 3, 15 ] }
+      position={ [ 0, 3, 15 ] }
       wrapperClass="text_in_scene" //Classname for MountainScene.css
       center
       distanceFactor={ 5 } //size
       occlude={ [ mountains_ref ] } //text dissappears when covered by object
     >
-        A series of meshBasic scenes making use of GSAP for camera and color changes. useFrame() for object movement. The only blender models used 
-        is the mountains, the vehicle + road, and the complete Day 1 Blender scene.<br/>
+        A series of scenes making use of GSAP for camera and color changes. useFrame() for object movement.<br/>
+
+        Scene 1 - A low-poly Blender model rendered in meshBasic. GSAP for color changes and camera movement.<br/><br/>
+
+        Scene 2 - No Blender models used. All in meshBasic. ThreeJS spheres used. postprocessing for Glow effect. Drei for stars and the trail effect. UseFrame() for object movement. GSAP for background color change.<br/><br/>
         
+        Scene 3 - Road, Car, light pole, and portal scene are all Blender. Portal scene is from Blender tutorial. All in meshBasic. Drei light helpers used for positioning. UseFrame() for constant rotation. GSAP for opacity and background color effect. Drei orbitControls to allow user manipulation. meshToon example spheres and wireframe example objects.<br/><br/>
+
         <small>press 'Enter' to progress</small>
     </Html>
 
