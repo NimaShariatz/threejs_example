@@ -49,7 +49,7 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
   const car_scene = useGLTF('./carscene_Dracco.glb')
   
   const Day13_scene = useGLTF('./Day1_013_compressed.glb')
-  const day13Ref = useRef<THREE.Group>(null);  
+  const carKnotsGroupRef = useRef<THREE.Group>(null);  
 
   const pointLightRef = useRef<THREE.PointLight>(null!);
   useHelper(pointLightRef, THREE.PointLightHelper, 2, 'teal');
@@ -163,8 +163,8 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
 
 
   useFrame((_state, delta) => { //normally it is "state", but we did "_state" to tell TypeScript that it is being intentionally ignored. so npm run deploy works now
-    if(day13Ref.current) {
-      day13Ref.current.rotation.y += delta * 0.2; // Adjust 0.2 to change the rotation speed
+    if(carKnotsGroupRef.current) {
+      carKnotsGroupRef.current.rotation.y += delta * 0.2; //rotates the group. the car and knots are inside the group.
     }
   })
 
@@ -176,7 +176,7 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
     <group position-z={-4.2} position-x={0} position-y={-1}>
 
 
-      <group ref={day13Ref}> {/* we make a <group/> for the primitive so that the rotation occurs from the center of the <group/>, not the center of the <primitive/> which may or may not be exactly centered*/}
+      <group ref={carKnotsGroupRef}> {/* we make a <group/> for the primitive so that the rotation occurs from the center of the <group/>, not the center of the <primitive/> which may or may not be exactly centered. and it rotates things isnide as well*/}
         <primitive
           object={car_scene.scene}
           scale={0.5}
@@ -194,6 +194,16 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
           */
       
         />
+
+        {/* 'for' statement */}
+        {torusKnotsList.map((knot) => (
+          <Float key={knot.id} floatIntensity={knot.floatIntensity}>
+            <mesh position={knot.position as [number, number, number]} scale={knot.scale}>{/* x y z */}
+              <torusKnotGeometry args={[10, 3, 3, 13, 17, 13]} />
+              <meshBasicMaterial wireframe={true} color={knot.color}/> {/* wireframe is on */}
+            </mesh>
+          </Float>
+        ))}
       </group>
 
       <primitive
@@ -203,20 +213,12 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
       />
 
 
-      {/* 'for' statement */}
-      {torusKnotsList.map((knot) => (
-        <Float key={knot.id} floatIntensity={knot.floatIntensity}>
-          <mesh position={knot.position as [number, number, number]} scale={knot.scale}>{/* x y z */}
-            <torusKnotGeometry args={[10, 3, 3, 13, 17, 13]} />
-            <meshBasicMaterial wireframe={true} color={knot.color} /> {/* wireframe is on */}
-          </mesh>
-        </Float>
-      ))}
+
 
       {sphereList.map((sphere) => (
         <mesh position={sphere.position as [number, number, number]} scale={sphere.scale}>{/* x y z */}
           <sphereGeometry args={[7, 36, 19, 0, 6.28, 6.28]} />
-          <meshToonMaterial color={sphere.color} /> {/* wireframe is on */}
+          <meshToonMaterial color={sphere.color} visible={sectionTracker.car_changeScene}/> {/* wireframe is on */}
         </mesh>
       ))}
 

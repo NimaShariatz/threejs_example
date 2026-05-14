@@ -1,7 +1,7 @@
-import {Sparkles} from "@react-three/drei"
+import {Sparkles, Trail} from "@react-three/drei"
 import gsap from 'gsap'
-import { useEffect} from 'react'
-import { useThree } from '@react-three/fiber'
+import { useEffect, useRef} from 'react'
+import { useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
@@ -32,6 +32,9 @@ interface MoonSceneProps {
 export default function MoonScene({ sectionTracker, handle_setSectionTracker }: MoonSceneProps)
 {
   const { camera, scene } = useThree();
+
+  const star = useRef<THREE.Mesh>(null);
+
 
   useEffect(() => {
 
@@ -70,15 +73,31 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
           ease: 'power4.inOut'
         });
 
-      }
+      }//if
       
   
-    }
-
+    }//if
 
   }, [sectionTracker.mountain_finished, sectionTracker.moon_start, handle_setSectionTracker, camera, scene])
 
 
+
+
+  useFrame((_state, delta) => {
+    if(star.current){
+
+      if(star.current.position.z > 200){
+        star.current.position.x = 33
+        star.current.position.y = 0
+        star.current.position.z = 1
+      } else {
+        star.current.position.x -= delta * 22
+        star.current.position.y -= delta * 8
+        star.current.position.z += delta * 20
+      }
+        
+    }
+  })
 
   
 
@@ -89,7 +108,6 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
   <>
     <group position-z={-10} position-x={0} position-y={29}>
       <Sparkles 
-       
         size={ 15 }
         scale={ [ 55, 23, -1 ] } //x, y, z
         speed={ 0 }
@@ -99,11 +117,23 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
       />
 
 
-
       <mesh position-x={7} position-y={ 3 } position-z={ 5 } scale={ 1.5 }>
-          <sphereGeometry />
-          <meshBasicMaterial color={[1.2, 1.1, 2.3]} toneMapped={false} />{/* Turn off tone mapping and boost the color over 1 so the bloom picks it up */}
+        <sphereGeometry />
+        <meshBasicMaterial color={[1.2, 1.1, 2.3]} toneMapped={false} />{/* Turn off tone mapping and boost the color over 1 so the bloom picks it up */}
       </mesh>
+
+      <Trail
+        width={10}          // Width of the line
+        length={20}           // Length of the trail
+        color={"white"} // Match the star's color
+        attenuation={(t) => t * t} // Make it taper off at the end
+      >
+        <mesh ref={star} position-x={ 250 } position-y={ 30 } position-z={ 0 } scale={ 0.10 }> {/* z makes it behind the moon */}
+            <sphereGeometry />
+            <meshBasicMaterial color={"white"} toneMapped={false} />
+        </mesh>
+      </Trail>
+
 
       <AnimatedStar startX={200} startY={30} speedX={80} speedY={9} resetX={-200} />
       <AnimatedStar startX={300} startY={28} speedX={80} speedY={7} resetX={-320} />
