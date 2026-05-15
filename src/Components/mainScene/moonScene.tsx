@@ -117,8 +117,8 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
       />
 
 
-      <mesh position-x={7} position-y={ 3 } position-z={ 5 } scale={ 1.5 }>
-        <sphereGeometry />
+      <mesh position-x={7} position-y={ 3 } position-z={ 5 }> {/* notice how i did not use scale={ 1.5 }... */}
+        <sphereGeometry args={[1.8, 30, 30]} /> {/* can be done with circleGeometry. Though because of the 20deg camera angle it would look weird*/}
         <meshBasicMaterial color={[1.2, 1.1, 2.3]} toneMapped={false} />{/* Turn off tone mapping and boost the color over 1 so the bloom picks it up */}
       </mesh>
 
@@ -128,8 +128,8 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
         color={"white"} // Match the star's color
         attenuation={(t) => t * t} // Make it taper off at the end
       >
-        <mesh ref={star} position-x={ 250 } position-y={ 30 } position-z={ 0 } scale={ 0.10 }> {/* z makes it behind the moon */}
-            <sphereGeometry />
+        <mesh ref={star} position-x={ 250 } position-y={ 30 } position-z={ 0 }> {/* z makes it behind the moon */}
+            <sphereGeometry args={[0.1, 20, 20]} />
             <meshBasicMaterial color={"white"} toneMapped={false} />
         </mesh>
       </Trail>

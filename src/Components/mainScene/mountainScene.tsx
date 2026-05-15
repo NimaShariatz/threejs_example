@@ -75,7 +75,10 @@ export default function MountainScene({ sectionTracker, handle_setSectionTracker
           else if (mesh.name === 'mountain_5') initialColor.set('#e4d0aa');
     
           const materialParams: THREE.MeshBasicMaterialParameters = {
-            color: initialColor
+            color: initialColor,
+            //wireframe: true
+
+            
           };
 
           if (mesh.userData.baseMap) {

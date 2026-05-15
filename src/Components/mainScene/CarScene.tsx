@@ -9,18 +9,18 @@ import gsap from 'gsap'
 
 
 const torusKnotsList = [
-  { id: 1, position: [7, 30, 5], scale: 0.1, color: "#e1cb82", floatIntensity: 3 },
-  { id: 2, position: [-6, 26, 2], scale: 0.19, color: "#a28cf1", floatIntensity: 2 },
-  { id: 3, position: [3, 32, -6], scale: 0.08, color: "#64b5f6", floatIntensity: 5 },
-  { id: 4, position: [0, 34, 8], scale: 0.12, color: "#ef5350", floatIntensity: 4 },
+  { id: 1, position: [7, 30, 5], arg_values: [1, 3, 3, 13, 17, 13], scale: 1, color: "#e1cb82", floatIntensity: 3 },
+  { id: 2, position: [-6, 26, 2], arg_values: [1, 3, 3, 13, 17, 13], scale: 1, color: "#a28cf1", floatIntensity: 2 },
+  { id: 3, position: [3, 32, -6], arg_values: [2, 3, 3, 13, 17, 13], scale: 1, color: "#64b5f6", floatIntensity: 5 },
+  { id: 4, position: [0, 34, 8], arg_values: [3, 3, 3, 13, 17, 13], scale: 1, color: "#ef5350", floatIntensity: 4 },
 ];
 
 
 const sphereList = [
-  { id: 1, position: [7, 3, 5], scale: 0.13, color: "#e1cb82"},
-  { id: 2, position: [-6, 6, 2], scale: 0.21, color: "#a28cf1"},
-  { id: 3, position: [3, 8, -6], scale: 0.11, color: "#64b5f6"},
-  { id: 4, position: [0, 11, 8], scale: 0.14, color: "#ef5350"}
+  { id: 1, position: [7, 3, 5], arg_values: [1.4, 30, 15], scale: 1, color: "#e1cb82"},
+  { id: 2, position: [-6, 6, 2], arg_values: [2.4, 30, 15], scale: 1, color: "#a28cf1"},
+  { id: 3, position: [3, 8, -6], arg_values: [1.9, 30, 15], scale: 1, color: "#64b5f6"},
+  { id: 4, position: [0, 11, 8], arg_values: [2.3, 30, 15], scale: 1, color: "#ef5350"}
 ];
 
 
@@ -104,6 +104,7 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
 
     if(sectionTracker.car_changeScene){
       /*
+      //meshBasic conversion
       Day13_scene.scene.traverse((child) => { //converts to meshBasic
         if ((child as THREE.Mesh).isMesh) {
           const mesh = child as THREE.Mesh;
@@ -119,7 +120,26 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
           }
         }
       });
-      
+      */
+
+
+      /*
+      //meshToon conversion
+      Day13_scene.scene.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) {
+          const mesh = child as THREE.Mesh;
+          if (mesh.material) {
+            const sourceMaterial = mesh.material as THREE.Material & {
+              map?: THREE.Texture;
+              color?: THREE.Color | string | number;
+            };
+            mesh.material = new THREE.MeshToonMaterial({ // <-- Changed to MeshToonMaterial
+              map: sourceMaterial.map, // preserve texture
+              color: sourceMaterial.color ?? 0xffffff
+            });
+          }
+        }
+      });
       */
 
 
@@ -207,8 +227,8 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
         {/* 'for' statement */}
         {torusKnotsList.map((knot) => (
           <Float key={knot.id} floatIntensity={knot.floatIntensity}>
-            <mesh position={knot.position as [number, number, number]} scale={knot.scale}>{/* x y z */}
-              <torusKnotGeometry args={[10, 3, 3, 13, 17, 13]} />
+            <mesh position={[knot.position[0], knot.position[1], knot.position[2]]} scale={knot.scale}>{/* x y z. */}
+              <torusKnotGeometry args={knot.arg_values as [number, number, number, number, number, number]} /> {/* can do "as [...]" instead of knot.arg_values[#] */}
               <meshBasicMaterial wireframe={true} color={knot.color}/> {/* wireframe is on */}
             </mesh>
           </Float>
@@ -225,8 +245,8 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
 
 
       {sphereList.map((sphere) => (
-        <mesh position={sphere.position as [number, number, number]} scale={sphere.scale}>{/* x y z */}
-          <sphereGeometry args={[7, 36, 19, 0, 6.28, 6.28]} />
+        <mesh  position={[sphere.position[0], sphere.position[1], sphere.position[2]]} scale={sphere.scale}>{/* x y z */}
+          <sphereGeometry args={[sphere.arg_values[0], sphere.arg_values[1], sphere.arg_values[2]]} />
           <meshToonMaterial color={sphere.color} visible={sectionTracker.car_changeScene}/> {/* wireframe is on */}
         </mesh>
       ))}

@@ -33,8 +33,8 @@ export default function AnimatedStar({ startX, startY, speedX, speedY, resetX }:
       color={"white"}
       attenuation={(t) => t * t}
     >
-      <mesh ref={starRef} position={[startX, startY, 0]} scale={0.1}>
-        <sphereGeometry />
+      <mesh ref={starRef} position={[startX, startY, 0]}>
+        <sphereGeometry args={[0.11, 15, 15]} />
         <meshBasicMaterial color={"white"} toneMapped={false} />
       </mesh>
     </Trail>
