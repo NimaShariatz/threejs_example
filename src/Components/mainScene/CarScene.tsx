@@ -25,7 +25,10 @@ const sphereList = [
 
 
 
-
+//the preload() occurs immediately! On startup of localhost. long before <CarScene/> is rendered.
+useGLTF.preload('./carscene_Dracco.glb');//preloads to prevent THREE.WebGLRenderer: Context Lost since WebGL would be overwhelmed with the unmount of </moonScene.tsx> and loading this
+useGLTF.preload('./Day1_013_compressed.glb');//preloads to prevent THREE.WebGLRenderer: Context Lost since WebGL would be overwhelmed with the unmount of </moonScene.tsx> and loading this
+//preloaded glb will not be lost even on component dismount. yay.
 
 
 
@@ -166,6 +169,8 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
         duration: 2,
         ease: "power2.inOut",
       })
+
+
       gsap.to(pointLightRef.current.color, {
         r: 1,  // normalize to 0-1
         g: 1,
@@ -192,7 +197,10 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
   
   return(
   <>
+    
     <OrbitControls makeDefault/> {/* automatically looks at 0,0,0. Camera animations stop working completely */}
+    
+    
     <group position-z={-4.2} position-x={0} position-y={-1}>
 
 
@@ -205,7 +213,9 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
           we CAN conditionally render both <primitive/> which saves on ram/vram.
           But the browser has to take the geometry and texture data and push it back to the GPU. This is an expensive operation and will almost always cause a noticeable frame drop or "hitch" exactly when the model appears.
           Also if you simultaneously mount and unmount <primitve/>s, it can overwhelm the 
-          WebGL pipeline giving you a "THREE.WebGLRenderer: Context Lost" error.
+          WebGL pipeline giving you a "THREE.WebGLRenderer: Context Lost" message.
+
+          The "THREE.WebGLRenderer: Context Lost" message occurs when the GPU runs out of memory or the WebGL instruction pipeline gets overwhelmed, prompting the browser to kill the context to prevent a system-wide hardware crash.
 
           In App.tsx, saving on ram is worthwhile given we have scene transitions to hide somewhat it. 
           But not here. So playing with visibility is better than conditionally rendering it.
@@ -221,7 +231,6 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
           When you add or remove a light source, Three.js has to recompile the shader programs for all materials currently in the scene to accommodate the new lighting setup.
           Do not remove light sources unless you need to unmount an entire scene. Otherwise just set visibility or intensity to 0.
           */
-      
         />
 
         {/* 'for' statement */}
@@ -245,7 +254,7 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
 
 
       {sphereList.map((sphere) => (
-        <mesh  position={[sphere.position[0], sphere.position[1], sphere.position[2]]} scale={sphere.scale}>{/* x y z */}
+        <mesh key={sphere.id} position={[sphere.position[0], sphere.position[1], sphere.position[2]]} scale={sphere.scale}>{/* x y z */}
           <sphereGeometry args={[sphere.arg_values[0], sphere.arg_values[1], sphere.arg_values[2]]} />
           <meshToonMaterial color={sphere.color} visible={sectionTracker.car_changeScene}/> {/* wireframe is on */}
         </mesh>
@@ -285,3 +294,4 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
   </>
   )
 }
+

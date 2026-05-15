@@ -20,11 +20,12 @@ function App() {
     mountain_purple_complete: false,
     mountain_finished: false,
     moon_start: false,
+    moon_red: false,
     moon_finish: false,
     car_start: false,
     car_changeScene: false
   })
-  const handle_setSectionTracker = (sect: 'start' | 'mountain_purple' | 'mountain_purple_complete' | 'mountain_finished' | 'moon_start' | 'moon_finish' | 'car_start' | 'car_changeScene') => {
+  const handle_setSectionTracker = (sect: 'start' | 'mountain_purple' | 'mountain_purple_complete' | 'mountain_finished' | 'moon_start' | 'moon_red' | 'moon_finish' | 'car_start' | 'car_changeScene') => {
     setSectionTracker(prev => ({ ...prev, [sect]: true }))
   }
 
@@ -37,11 +38,16 @@ function App() {
         if(!sectionTracker.start){
           handle_setSectionTracker('start');
           setStartMusic(true)
+
         }else if(sectionTracker.mountain_purple_complete && !sectionTracker.mountain_finished){
           handle_setSectionTracker('mountain_finished');
 
+        }else if(sectionTracker.moon_start && !sectionTracker.moon_red){
+          handle_setSectionTracker('moon_red')
+
         }else if(sectionTracker.moon_start && !sectionTracker.moon_finish){
           handle_setSectionTracker('moon_finish')
+
         }else if(sectionTracker.moon_finish && !sectionTracker.car_changeScene){
           handle_setSectionTracker('car_changeScene')
         }
@@ -58,10 +64,10 @@ function App() {
 
 
   useEffect(() =>{
-      const bgAudio = new Audio('./Macroblank - Glyph Chamber.m4a');
-      bgAudio.loop = true;
-      bgAudio.volume = 0.3;
-      bgAudio.play()
+    const bgAudio = new Audio('./Macroblank - Glyph Chamber.m4a');
+    bgAudio.loop = true;
+    bgAudio.volume = 0.3;
+    bgAudio.play()
   }, [startMusic])
 
   return (

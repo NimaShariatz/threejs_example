@@ -18,11 +18,11 @@ interface MoonSceneProps {
     mountain_purple_complete: boolean;
     mountain_finished: boolean;
     moon_start: boolean;
-    moon_finish: boolean;
+    moon_red: boolean;
     
     
   };
-  handle_setSectionTracker: (sect: 'mountain_purple_complete' | 'mountain_finished' | 'moon_start' | 'moon_finish') => void;
+  handle_setSectionTracker: (sect: 'mountain_purple_complete' | 'mountain_finished' | 'moon_start' | 'moon_red') => void;
 }
 
 
@@ -34,6 +34,8 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
   const { camera, scene } = useThree();
 
   const star = useRef<THREE.Mesh>(null);
+  const moonMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
+  const moonObject = useRef<THREE.Mesh>(null);
 
 
   useEffect(() => {
@@ -78,7 +80,28 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
   
     }//if
 
-  }, [sectionTracker.mountain_finished, sectionTracker.moon_start, handle_setSectionTracker, camera, scene])
+
+    if(sectionTracker.moon_red && moonMaterialRef.current && moonObject.current){
+      // Animate the moon's color to a glowing red over 2 seconds
+      gsap.to(moonMaterialRef.current.color, {
+        r: 2, // High value (> 1) so it glows with Bloom
+        g: 1,
+        b: 2,
+        duration: 2,
+        ease: "power2.inOut"
+      });
+      // Animate the moon's scale
+      gsap.to(moonObject.current.scale, {
+        x: 0.9,
+        y: 0.9,
+        z: 0.9,
+        duration: 2,
+        ease: "power2.inOut"
+      });
+
+    }
+
+  }, [sectionTracker.mountain_finished, sectionTracker.moon_start, sectionTracker.moon_red, handle_setSectionTracker, camera, scene])
 
 
 
@@ -117,9 +140,9 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
       />
 
 
-      <mesh position-x={7} position-y={ 3 } position-z={ 5 }> {/* notice how i did not use scale={ 1.5 }... */}
+      <mesh ref={moonObject} position-x={7} position-y={ 3 } position-z={ 5 }> {/* notice how i did not use scale={ 1.5 }... */}
         <sphereGeometry args={[1.8, 30, 30]} /> {/* can be done with circleGeometry. Though because of the 20deg camera angle it would look weird*/}
-        <meshBasicMaterial color={[1.2, 1.1, 2.3]} toneMapped={false} />{/* Turn off tone mapping and boost the color over 1 so the bloom picks it up */}
+        <meshBasicMaterial ref={moonMaterialRef} color={[1.2, 1.1, 2.3]} toneMapped={false} />{/* Turn off tone mapping and boost the color over 1 so the bloom picks it up */}
       </mesh>
 
       <Trail

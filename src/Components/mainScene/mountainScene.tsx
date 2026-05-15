@@ -31,6 +31,8 @@ interface MountainSceneProps {
 }
 
 
+useGLTF.preload('./mountains.glb');//helps a bit with loading. Occurs on localhost launch, not on component mount.
+//preloaded glb will not be lost even on component dismount. yay.
 
 
 
@@ -161,11 +163,6 @@ export default function MountainScene({ sectionTracker, handle_setSectionTracker
 
   return(
   <>
-  {/*<OrbitControls makeDefault />*/}
-  
-
-  {/* results in a performance hit. multisampling is anti-aliasing. should keep to 0. max is 8 */}
-
 
   <group ref={ mountains_ref } position-z={-10} position-x={4} position-y={-2}>
     <primitive
@@ -179,11 +176,11 @@ export default function MountainScene({ sectionTracker, handle_setSectionTracker
       distanceFactor={ 5 } //size
       occlude={ [ mountains_ref ] } //text dissappears when covered by object
     >
-        A series of scenes making use of GSAP for camera and color changes. useFrame() for object movement.<br/>
+        A series of scenes making use of GSAP for camera and color changes. useFrame() for object movement.<br/><br/>
 
         Scene 1 - A low-poly Blender model rendered in meshBasic. GSAP for color changes and camera movement.<br/><br/>
 
-        Scene 2 - No Blender models used. All in meshBasic. ThreeJS spheres used. postprocessing for Glow effect. Drei for stars and the trail effect. UseFrame() for object movement. GSAP for background color change.<br/><br/>
+        Scene 2 - No Blender models used. All in meshBasic. ThreeJS spheres used. postprocessing for Glow effect. Drei for stars and the trail effect. UseFrame() for object movement. GSAP for background color and scale change.<br/><br/>
         
         Scene 3 - Road, Car, light pole, and portal scene are all Blender. Portal scene is from Blender tutorial. All in meshBasic. Drei light helpers used for positioning. UseFrame() for constant rotation. GSAP for opacity and background color effect. Drei orbitControls to allow user manipulation. meshToon example spheres and wireframe example objects.<br/><br/>
 
