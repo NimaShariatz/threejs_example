@@ -69,7 +69,6 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
 
   const toonSphere = useRef<THREE.Mesh>(null);
 
-    const groupRef = useRef<THREE.Group>(null!)//just for the Drei <Html/> text
   
   
   const changeColor = () =>
@@ -219,7 +218,7 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
     <OrbitControls makeDefault/> {/* automatically looks at 0,0,0. Camera animations stop working completely */}
     
     
-    <group ref={groupRef} position-z={-4.2} position-x={0} position-y={-1}>
+    <group position-z={-4.2} position-x={0} position-y={-1}>
 
 
       <group ref={carKnotsGroupRef}> {/* we make a <group/> for the primitive so that the rotation occurs from the center of the <group/>, not the center of the <primitive/> which may or may not be exactly centered. and it rotates things isnide as well*/}
