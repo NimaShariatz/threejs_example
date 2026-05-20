@@ -9,12 +9,34 @@ import MoonScene from './Components/mainScene/moonScene'
 import CarScene from './Components/mainScene/carScene'
 
 
+/*
+
+--Purpose--
+Where <Canvas/> lives. Inside are a series of components that hold our 3D models
+and are conditionally rendered. When the component is no longer rendered, 
+RAM/VRAM storage is saved and performance is improved by not running TypeScript logic.
+React-Perf is also implimented here. 
+
+--Structure--
+* sectionTracker keeps track of event tracking across various components. Done by 'Enter' event listener which uses a setter to set variables to "True".
+
+* <Canvas/> tag and a <div/> tag outside of it for setting size. 100%, 100% in this case. The <Canvas/> tag has a "flat" variable which changes color application of imported models that don't have their color assigned by code.
+
+* Camera is declared in <Canvas/> tag. Can be set to Orthographic or Perspective.
+
+* React-perf is rendered here.
+
+* Components are rendered conditionally to save on RAM, VRAM and general performance
+
+*/
+
+
 
 function App() {
 
   const [startMusic, setStartMusic] = useState(false);
   
-  const [sectionTracker, setSectionTracker] = useState({
+  const [sectionTracker, setSectionTracker] = useState({ //used for event tracking across components
     start: false,
     mountain_purple: false,
     mountain_purple_complete: false,
@@ -30,29 +52,32 @@ function App() {
   }
 
 
-  //Listen for the Enter key press
+  
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const handleKeyDown = (event: KeyboardEvent) => { //Listen for the Enter key press
       //console.log(sectionTracker)
       if (event.key === 'Enter') {
         if(!sectionTracker.start){
           handle_setSectionTracker('start');
-          setStartMusic(true)
+          if(!startMusic){
+            setStartMusic(true)
+          }//if
 
         }else if(sectionTracker.mountain_purple_complete && !sectionTracker.mountain_finished){
           handle_setSectionTracker('mountain_finished');
 
         }else if(sectionTracker.moon_start && !sectionTracker.moon_red){
           handle_setSectionTracker('moon_red')
+          //useGLTF.clear('./mountains.glb') clears the preloaded from RAM. Only really beneficial if our model is huge, which it absolutely is not
 
         }else if(sectionTracker.moon_start && !sectionTracker.moon_finish){
           handle_setSectionTracker('moon_finish')
 
         }else if(sectionTracker.moon_finish && !sectionTracker.car_changeScene){
           handle_setSectionTracker('car_changeScene')
-        }
-      }
-    };
+        }//if
+      }//if
+    };//on 'Enter'
 
 
     window.addEventListener('keydown', handleKeyDown);
@@ -94,7 +119,7 @@ function App() {
         far: 110, //anything beyond 110 distance will not be rendered, saving performanceW
         position: [ 5, 1.5, 15 ] //note: Z-axis is in and out. Y is up and down. X is side to side. Not the same as blender    
       } }
-    >
+      >
       <Perf position="top-left" />
 
       <color args={ [ '#e9dbc3' ] } attach="background" />

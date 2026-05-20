@@ -1,21 +1,27 @@
-import { useEffect, useRef } from 'react'
 import "./mainScene.css"
-
-
+import { useEffect, useRef } from 'react'
 import { useGLTF, Html } from "@react-three/drei"
 //import { OrbitControls } from "@react-three/drei"
-
-
 import { useThree } from '@react-three/fiber'
 //import { useFrame } from '@react-three/fiber'
-
 import * as THREE from 'three'
-
 import gsap from 'gsap' // Import GSAP
 
+/*
 
+--Purpose--
+Render the mountains in meshBasic which requires some TypeScript. We also assign starting colors to the mountains
+as './mountains.glb' did not have any colors given to it in Blender. GSAP is used to animate the camera 
+and change the colors of './mountains.glb' and the background
 
+--Structure--
+* a useEffect to set initial colors of './mountains.glb'. Also change the colors of './mountains.glb' via GSAP
 
+* a <group/> which contains our './mountains.glb' and a <Html/> tag for throwing text in the scene. Note the occlusion field with a useRef attached
+to it which hides the <Html/> tag if its behind the object 
+is used for show
+
+*/
 
 
 interface MountainSceneProps {
@@ -30,9 +36,11 @@ interface MountainSceneProps {
   handle_setSectionTracker: (sect: 'start' | 'mountain_purple' | 'mountain_purple_complete' | 'mountain_finished') => void;
 }
 
-
 useGLTF.preload('./mountains.glb');//helps a bit with loading. Occurs on localhost launch, not on component mount.
-//preloaded glb will not be lost even on component dismount. yay.
+//preloaded glb will not be lost even on component dismount. if you want to remove it from RAM, do useGLTF.clear('./mountains.glb') in App.tsx
+
+
+
 
 
 
@@ -43,24 +51,6 @@ export default function MountainScene({ sectionTracker, handle_setSectionTracker
   const mountains_ref = useRef<THREE.Group>(null!)//just for the Drei <Html/> text
   const mountains = useGLTF('./mountains.glb')
   const { camera, scene } = useThree();
-
-
-  //Listen for the Enter key press
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        handle_setSectionTracker('start');
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    // Cleanup the event listener when component unmounts
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [handle_setSectionTracker]);
-
 
 
   useEffect(() => {
@@ -79,17 +69,15 @@ export default function MountainScene({ sectionTracker, handle_setSectionTracker
           const materialParams: THREE.MeshBasicMaterialParameters = {
             color: initialColor,
             //wireframe: true
-
-            
           };
 
           if (mesh.userData.baseMap) {
             materialParams.map = mesh.userData.baseMap;
-          } 
+          }//if
           mesh.material = new THREE.MeshBasicMaterial(materialParams);
-        } 
-      });
-    }
+        }//if
+      });//for
+    }//if
 
     // START ANIMATION
     if (sectionTracker.start && !sectionTracker.mountain_purple) {
@@ -111,7 +99,7 @@ export default function MountainScene({ sectionTracker, handle_setSectionTracker
           handle_setSectionTracker('mountain_purple'); // triggers color change upon animation finishing
         }
       });
-    }
+    }//if
 
     // PURPLE MOUNTAINS ANIMATION
     if (sectionTracker.mountain_purple && !sectionTracker.mountain_purple_complete) {
@@ -124,7 +112,7 @@ export default function MountainScene({ sectionTracker, handle_setSectionTracker
           duration: 1,
           ease: 'power1.in'
         });
-      }
+      }//if
       
       mountains.scene.traverse((child) => {
         if ((child as THREE.Mesh).isMesh) {
@@ -148,12 +136,12 @@ export default function MountainScene({ sectionTracker, handle_setSectionTracker
               onComplete: () => {
                 if (mesh.name === 'mountain_1') {
                   handle_setSectionTracker('mountain_purple_complete');
-                }
+                }//if
               }
             });
-          }
-        }
-      });
+          }//if
+        }//if
+      });//for
     }
   }, [mountains, scene, sectionTracker.start, sectionTracker.mountain_purple, sectionTracker.mountain_purple_complete, camera, handle_setSectionTracker]);
 

@@ -4,9 +4,35 @@ import { useEffect, useRef} from 'react'
 import { useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
-
 import AnimatedStar from '../stars/stars'
 
+
+
+
+/*
+
+--Purpose--
+Use the default shapes from ThreeJS and various libraries to create this scene. No blender models, and a heavy use of GSAP and useFrame() for animation.
+Post-processing for that glow effect on the moon and static stars. <AnimatedStar/> created to reduce copy-paste code.
+
+--Structure--
+* a useEffect for animating camera, colors and scale of the moon
+
+* a useFrame() specifically for the star that zooms towards and past the camera
+
+* <Sparkles/> from Drei is used for the stars. <Bloom/> does effect them
+
+* a meshBasic sphereGeometry for the moon which RGB values set beyond 1 so that <Bloom/> works on it
+
+* a <Trail/> from Drei and a meshBasic sphereGeometry attach to it which gives us the shooting star
+
+* <AnimatedStar/> is each a shooting star, just placed in it's own component to reduce copy-paste code. Otherwise same logic as the shooting star coming towards the camera.
+
+* <EffectComposer/> from post-processing, placed outside of the <group/>. Inside it we declare the effects we want to use. In this case just <Bloom/> which effects anything with 
+RGB values > 1. This gives us the glow effect on stars and moon
+
+
+*/
 
 
 
@@ -55,7 +81,7 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
       });
       
       // Animate Rotation (Looking Upwards)
-      //Can use LookAt if desired.
+      //Can use LookAt() if desired.
       gsap.to(camera.rotation, {
         x: THREE.MathUtils.degToRad(20),//π radians (~3.14) = 180 degrees (half a circle)
         duration: 3,
@@ -99,7 +125,7 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
         ease: "power2.inOut"
       });
 
-    }
+    }//if
 
   }, [sectionTracker.mountain_finished, sectionTracker.moon_start, sectionTracker.moon_red, handle_setSectionTracker, camera, scene])
 
@@ -117,9 +143,9 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
         star.current.position.x -= delta * 22
         star.current.position.y -= delta * 8
         star.current.position.z += delta * 20
-      }
+      }//if
         
-    }
+    }//if
   })
 
   
