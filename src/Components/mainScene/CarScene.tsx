@@ -1,4 +1,6 @@
-import { useEffect, useRef}  from "react";
+import "./mainScene.css"
+
+import {useEffect, useRef}  from "react";
 import {OrbitControls, useGLTF, useHelper, Float } from "@react-three/drei"
 import { useThree, useFrame } from '@react-three/fiber'
 
@@ -45,6 +47,7 @@ interface CarSceneProps {
 
 export default function CarScene({ sectionTracker, handle_setSectionTracker }: CarSceneProps)
 {
+  
 
   const { scene } = useThree();
   
@@ -63,6 +66,21 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
   useHelper(spotLightRef, THREE.SpotLightHelper, 'red');
 
   const ambiLightRef = useRef<THREE.AmbientLight>(null!);
+
+  const toonSphere = useRef<THREE.Mesh>(null);
+
+    const groupRef = useRef<THREE.Group>(null!)//just for the Drei <Html/> text
+  
+  
+  const changeColor = () =>
+  {
+    if(toonSphere.current){
+      // We must cast the material or access it safely since THREE.Material doesn't guarantee a color property by default
+      const material = toonSphere.current.material as THREE.MeshToonMaterial;
+      material.color.set(`hsl(${Math.random() * 360}, 100%, 75%)`);
+    }
+  };
+
 
 
   useEffect(() => {
@@ -201,7 +219,7 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
     <OrbitControls makeDefault/> {/* automatically looks at 0,0,0. Camera animations stop working completely */}
     
     
-    <group position-z={-4.2} position-x={0} position-y={-1}>
+    <group ref={groupRef} position-z={-4.2} position-x={0} position-y={-1}>
 
 
       <group ref={carKnotsGroupRef}> {/* we make a <group/> for the primitive so that the rotation occurs from the center of the <group/>, not the center of the <primitive/> which may or may not be exactly centered. and it rotates things isnide as well*/}
@@ -242,6 +260,7 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
             </mesh>
           </Float>
         ))}
+
       </group>
 
       <primitive
@@ -253,14 +272,25 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
 
 
 
+
       {sphereList.map((sphere) => (
-        <mesh key={sphere.id} position={[sphere.position[0], sphere.position[1], sphere.position[2]]} scale={sphere.scale}>{/* x y z */}
+        <mesh key={sphere.id} position={[sphere.position[0], sphere.position[1], sphere.position[2]]}  visible={sectionTracker.car_changeScene} scale={sphere.scale}>{/* x y z */}
           <sphereGeometry args={[sphere.arg_values[0], sphere.arg_values[1], sphere.arg_values[2]]} />
-          <meshToonMaterial color={sphere.color} visible={sectionTracker.car_changeScene}/> {/* wireframe is on */}
+          <meshToonMaterial color={sphere.color}/>
         </mesh>
       ))}
 
-
+      <mesh 
+        ref={toonSphere} 
+        position-x={3} position-y={7} position-z={5}
+        onClick={sectionTracker.car_changeScene ? changeColor : undefined} //if true then have changeColor work
+        onPointerEnter={sectionTracker.car_changeScene ? () => { document.body.style.cursor = 'pointer' } : undefined}// if true then have pointer work
+        onPointerLeave={sectionTracker.car_changeScene ? () => { document.body.style.cursor = 'default' } : undefined}// if true then have pointer work
+        visible={sectionTracker.car_changeScene}
+        >
+        <boxGeometry args={[4, 4, 4]}/>
+        <meshToonMaterial color={"#fff"}/>
+      </mesh>
 
       <pointLight 
         ref={pointLightRef} 
