@@ -240,7 +240,7 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
     if(carRef.current && KnotsGroupRef.current) {
       carRef.current.rotation.y += delta * 0.2; //rotates the primitive
       KnotsGroupRef.current.rotation.y += delta * 0.15//rotates the group containg all the objects
-    }
+    }//if
   })
 
   
