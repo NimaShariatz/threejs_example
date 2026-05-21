@@ -44,10 +44,10 @@ Heavy use of visible={}.
 
 
 const torusKnotsList = [
-  { id: 1, position: [7, 30, 5], arg_values: [1, 3, 3, 13, 17, 13], scale: 1, color: "#e1cb82", floatIntensity: 3 },
-  { id: 2, position: [-6, 26, 2], arg_values: [1, 3, 3, 13, 17, 13], scale: 1, color: "#a28cf1", floatIntensity: 2 },
-  { id: 3, position: [3, 32, -6], arg_values: [2, 3, 3, 13, 17, 13], scale: 1, color: "#64b5f6", floatIntensity: 5 },
-  { id: 4, position: [0, 34, 8], arg_values: [3, 3, 3, 13, 17, 13], scale: 1, color: "#ef5350", floatIntensity: 4 },
+  { id: 1, position: [7, 26, 5], arg_values: [1, 3, 3, 13, 17, 13], scale: 1, color: "#e1cb82", floatIntensity: 3 },
+  { id: 2, position: [-6, 22, 2], arg_values: [1, 3, 3, 13, 17, 13], scale: 1, color: "#a28cf1", floatIntensity: 2 },
+  { id: 3, position: [3, 28, -6], arg_values: [2, 3, 3, 13, 17, 13], scale: 1, color: "#64b5f6", floatIntensity: 5 },
+  { id: 4, position: [0, 30, 8], arg_values: [3, 3, 3, 13, 17, 13], scale: 1, color: "#ef5350", floatIntensity: 4 },
 ];// list to be rendered in a "for" statement
 
 
