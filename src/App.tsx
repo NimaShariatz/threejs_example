@@ -3,7 +3,7 @@ import './App.css'
 import { Perf } from "r3f-perf"
 
 import { Canvas } from '@react-three/fiber'
-import {useState, useEffect } from 'react'
+import {useState, useEffect, useRef } from 'react'
 import MountainScene from './Components/mainScene/mountainScene'
 import MoonScene from './Components/mainScene/moonScene'
 import CarScene from './Components/mainScene/carScene'
@@ -34,7 +34,8 @@ React-Perf is also implimented here.
 
 function App() {
 
-  const [startMusic, setStartMusic] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   
   const [sectionTracker, setSectionTracker] = useState({ //used for event tracking across components
     start: false,
@@ -53,14 +54,16 @@ function App() {
 
 
   
-  useEffect(() => {
+  useEffect(() => {// changes state when enter is pressed
     const handleKeyDown = (event: KeyboardEvent) => { //Listen for the Enter key press
       //console.log(sectionTracker)
       if (event.key === 'Enter') {
         if(!sectionTracker.start){
           handle_setSectionTracker('start');
-          if(!startMusic){
-            setStartMusic(true)
+          
+          if(!isPlaying){//music logic. ignore.
+            setIsPlaying(true);
+            audioRef.current?.play();
           }//if
 
         }else if(sectionTracker.mountain_purple_complete && !sectionTracker.mountain_finished){
@@ -88,74 +91,112 @@ function App() {
   });
 
 
-  useEffect(() =>{
-    const bgAudio = new Audio('./Macroblank - Glyph Chamber.m4a');
-    bgAudio.loop = true;
-    bgAudio.volume = 0.3;
-    bgAudio.play()
-  }, [startMusic])
+
+  // ---- music logic. ignore.
+  useEffect(() => {
+    audioRef.current = new Audio('./Macroblank - Glyph Chamber.m4a');
+    audioRef.current.loop = true;
+    audioRef.current.volume = 0.3;
+
+    // Cleanup when the component unmounts
+    return () => {
+      audioRef.current?.pause();
+    };
+  }, []);
+  const toggleMusic = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.currentTarget.blur();
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+  // ---- music logic. ignore.
+
+
+  /*
+  //----- if necassary you can create a hook for checking window width and adjust camera and scale values accordingly
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  useEffect(() => {
+    const handleResize = () => {
+      console.log("asdasd"); // Moved inside the event listener
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  */
+
 
   return (
     <>
     <div className='canvas_container'>
+      <button className='music_button' style={{opacity: isPlaying ? "0.75" : "0.4"}} onClick={toggleMusic}>
+        <svg xmlns="http://www.w3.org/2000/svg" width={"100%"} height={"100%"} viewBox="0 0 24 24">
+          <path fill="#ffffff" d="M21 3H9c-.55 0-1 .45-1 1v9.56c-.59-.34-1.27-.56-2-.56c-2.21 0-4 1.79-4 4s1.79 4 4 4s4-1.79 4-4V5h10v8.56c-.59-.34-1.27-.56-2-.56c-2.21 0-4 1.79-4 4s1.79 4 4 4s4-1.79 4-4V4c0-.55-.45-1-1-1"></path>
+        </svg>
+      </button>
+
+      <Canvas
+        //flat
+        // ^^ optional. change to the render's tonemapping. makes the colors more flat. Does have an effect on both meshBasic and meshStandard! 
+        //on meshStandard, the colors pop much more without flat.
+        //on meshbasic, the colors pop much more with flat. Noticable on the CarScente.tsx.
+        /*Note: the usage of flat does not effect mountaints.glb because we are directly assigning hex value colors. so the use of 
+        flat does not change it in any way. Where for say carsScene.tsx/Day1_013 (rendered in meshBasic), we are using the model colors which do get effected */
+
+        //TLDR: unless you are assigning the color of an object by code, flat will effect the colors of the model regardless of mesh type.
+        
+        //orthographic
+        //makes camera orthographic
+
+        camera={ {
+          fov: 40,
+          near: 0.1,
+          far: 110, //anything beyond 110 distance will not be rendered, saving performanceW
+          position: [ 5, 1.5, 15 ] //note: Z-axis is in and out. Y is up and down. X is side to side. Not the same as blender    
+        } }
+        >
+        <Perf position="top-left" />
+
+        <color args={ [ '#e9dbc3' ] } attach="background" />
 
 
-    <Canvas
-      //flat
-      // ^^ optional. change to the render's tonemapping. makes the colors more flat. Does have an effect on both meshBasic and meshStandard! 
-      //on meshStandard, the colors pop much more without flat.
-      //on meshbasic, the colors pop much more with flat. Noticable on the CarScente.tsx.
-      /*Note: the usage of flat does not effect mountaints.glb because we are directly assigning hex value colors. so the use of 
-       flat does not change it in any way. Where for say carsScene.tsx/Day1_013 (rendered in meshBasic), we are using the model colors which do get effected */
 
-      //TLDR: unless you are assigning the color of an object by code, flat will effect the colors of the model regardless of mesh type.
-      
-      //orthographic
-      //makes camera orthographic
+        {/* -- Conditional rendering --
+          The benefit is that it saves on memory(RAM/VRAM) and some FPS. However there is a sudden fps drop because  
+          the CPU has to garbage collect, recompile shaders (for lights), and pass heavy geometry/texture data back across the bridge to the GPU.
+          So there is pros and cons. Also removing and adding light sources (carScene.tsx) makes it even worse. So adding 
+          some sort of transition between scenes helps hide that.      
+        */}
 
-      camera={ {
-        fov: 40,
-        near: 0.1,
-        far: 110, //anything beyond 110 distance will not be rendered, saving performanceW
-        position: [ 5, 1.5, 15 ] //note: Z-axis is in and out. Y is up and down. X is side to side. Not the same as blender    
-      } }
-      >
-      <Perf position="top-left" />
+        {!sectionTracker.moon_start && 
+          <MountainScene 
+            sectionTracker={sectionTracker} 
+            handle_setSectionTracker={handle_setSectionTracker}
+          />
+        }
 
-      <color args={ [ '#e9dbc3' ] } attach="background" />
+        {!sectionTracker.car_start && 
+          <MoonScene
+            sectionTracker={sectionTracker} 
+            handle_setSectionTracker={handle_setSectionTracker} 
+          />
+        }
 
 
-
-      {/* -- Conditional rendering --
-        The benefit is that it saves on memory(RAM/VRAM) and some FPS. However there is a sudden fps drop because  
-        the CPU has to garbage collect, recompile shaders (for lights), and pass heavy geometry/texture data back across the bridge to the GPU.
-        So there is pros and cons. Also removing and adding light sources (carScene.tsx) makes it even worse. So adding 
-        some sort of transition between scenes helps hide that.      
-      */}
-
-      {!sectionTracker.moon_start && 
-        <MountainScene 
-          sectionTracker={sectionTracker} 
-          handle_setSectionTracker={handle_setSectionTracker} 
-        />
-      }
-
-      {!sectionTracker.car_start && 
-        <MoonScene
-          sectionTracker={sectionTracker} 
-          handle_setSectionTracker={handle_setSectionTracker} 
-        />
-      }
-
-
-      {sectionTracker.moon_finish &&
-        <CarScene
-          sectionTracker={sectionTracker} 
-          handle_setSectionTracker={handle_setSectionTracker} 
-        />
-      }
-      
-    </Canvas>
+        {sectionTracker.moon_finish &&
+          <CarScene
+            sectionTracker={sectionTracker} 
+            handle_setSectionTracker={handle_setSectionTracker} 
+          />
+        }
+        
+      </Canvas>
     </div>
     </>
   )
