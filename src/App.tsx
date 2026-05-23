@@ -181,7 +181,7 @@ function App() {
           />
         }
 
-        {!sectionTracker.car_start && 
+        {(!sectionTracker.car_start && sectionTracker.mountain_finished) && 
           <MoonScene
             sectionTracker={sectionTracker} 
             handle_setSectionTracker={handle_setSectionTracker} 

@@ -29,11 +29,10 @@ interface MountainSceneProps {
     start: boolean,
     mountain_purple: boolean,
     mountain_purple_complete: boolean,
-    mountain_finished: boolean
 
     
   };
-  handle_setSectionTracker: (sect: 'start' | 'mountain_purple' | 'mountain_purple_complete' | 'mountain_finished') => void;
+  handle_setSectionTracker: (sect: 'start' | 'mountain_purple' | 'mountain_purple_complete') => void;
 }
 
 useGLTF.preload('./mountains.glb');//helps a bit with loading. Occurs on localhost launch, not on component mount.
@@ -60,11 +59,11 @@ export default function MountainScene({ sectionTracker, handle_setSectionTracker
         if ((child as THREE.Mesh).isMesh) {
           const mesh = child as THREE.Mesh;
           const initialColor = new THREE.Color();
-          if (mesh.name === 'mountain_1') initialColor.set('#F4BA52');
-          else if (mesh.name === 'mountain_2') initialColor.set('#e7bb6b');
-          else if (mesh.name === 'mountain_3') initialColor.set('#e8c585');
-          else if (mesh.name === 'mountain_4') initialColor.set('#e7cc9a');
-          else if (mesh.name === 'mountain_5') initialColor.set('#e4d0aa');
+          if (mesh.name === 'mountain_1') initialColor.set('#f6992f');
+          else if (mesh.name === 'mountain_2') initialColor.set('#f1a145');
+          else if (mesh.name === 'mountain_3') initialColor.set('#f1ab5b');
+          else if (mesh.name === 'mountain_4') initialColor.set('#edb16b');
+          else if (mesh.name === 'mountain_5') initialColor.set('#f4bf83');
     
           const materialParams: THREE.MeshBasicMaterialParameters = {
             color: initialColor,
@@ -119,11 +118,11 @@ export default function MountainScene({ sectionTracker, handle_setSectionTracker
           const mesh = child as THREE.Mesh;
           const targetColor = new THREE.Color();
 
-          if (mesh.name === 'mountain_1') targetColor.set('#7178E7');
-          else if (mesh.name === 'mountain_2') targetColor.set('#7c82d8');
-          else if (mesh.name === 'mountain_3') targetColor.set('#9298df');
-          else if (mesh.name === 'mountain_4') targetColor.set('#a3a8e6');
-          else if (mesh.name === 'mountain_5') targetColor.set('#b8bbe9');
+          if (mesh.name === 'mountain_1') targetColor.set('#6770f7');
+          else if (mesh.name === 'mountain_2') targetColor.set('#7981f4');
+          else if (mesh.name === 'mountain_3') targetColor.set('#8890f2');
+          else if (mesh.name === 'mountain_4') targetColor.set('#99a0ee');
+          else if (mesh.name === 'mountain_5') targetColor.set('#abb1ed');
 
           const material = mesh.material as THREE.MeshBasicMaterial;
           if (material && material.color) {

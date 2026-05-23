@@ -192,7 +192,9 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
 
     </group>
 
-     {/* hit to performance... does unfortunatley effect <Sparkles/> as well*/}
+     {/* hit to performance... does unfortunatley effect <Sparkles/> as well. It also effects the colors our .glb models... all of them
+     Hence the flicker of mountains to a darker shade of purple when moonScene.tsx is rendered (and <EffectComposer/> kicks in) 
+     */}
     <EffectComposer>
       <Bloom 
         luminanceThreshold={1.1}//anything with an rgb beyond 1
