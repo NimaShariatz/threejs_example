@@ -118,7 +118,7 @@ function App() {
 
 
   /*
-  //----- if necassary you can create a hook for checking window width and adjust camera and scale values accordingly
+  //----- if necassary you can create a hook for checking window width and adjust camera and scale values accordingly for mobile
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   useEffect(() => {
     const handleResize = () => {
@@ -149,7 +149,7 @@ function App() {
           fov: 40,
           near: 0.1,
           far: 110, //anything beyond 110 distance will not be rendered, saving performanceW
-          position: [ 5, 1.5, 15 ] //note: Z-axis is in and out. Y is up and down. X is side to side. Not the same as blender    
+          position: [ 5, 1.5, 15 ] //starting position  
         } }
         >
         <Perf position="top-left" />
