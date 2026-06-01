@@ -44,15 +44,3 @@ npm install @react-three/postprocessing
 see docs: https://react-postprocessing.docs.pmnd.rs/effects/autofocus
 
 
-Mountains:
-
-We used alot of gsap for color stuff. We used camera.lookAt(0, 0, 0); at the first camera movement
-so it always looked at that point
-
-
-
-Moon:
-
-For camera movement, I did both movement and a 20deg rotation upwards. Not necassary, but just for example purposes.
-
-we used a function for the stars as I wanted them destroyed. The reason being that when they are moved again to the starting point, their trail flashes back as well which makes it look like a meteor going the opposite direction. 
