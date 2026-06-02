@@ -4,7 +4,7 @@ import { useEffect, useRef} from 'react'
 import { useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
-import AnimatedStar from '../stars/stars'
+import StarStreak from '../stars/starstreak'
 
 
 
@@ -13,7 +13,7 @@ import AnimatedStar from '../stars/stars'
 
 --Purpose--
 Use the default shapes from ThreeJS and various libraries to create this scene. No blender models, and a heavy use of GSAP and useFrame() for animation.
-Post-processing for that glow effect on the moon and static stars. <AnimatedStar/> created to reduce copy-paste code.
+Post-processing for that glow effect on the moon and static stars. <StarStreak/> created to reduce copy-paste code.
 
 --Structure--
 * a useEffect for animating camera, colors and scale of the moon
@@ -26,7 +26,7 @@ Post-processing for that glow effect on the moon and static stars. <AnimatedStar
 
 * a <Trail/> from Drei and a meshBasic sphereGeometry attach to it which gives us the shooting star
 
-* <AnimatedStar/> is each a shooting star, just placed in it's own component to reduce copy-paste code. Otherwise same logic as the shooting star coming towards the camera.
+* <StarStreak/> is each a shooting star, just placed in it's own component to reduce copy-paste code. Otherwise same logic as the shooting star coming towards the camera.
 
 * <EffectComposer/> from post-processing, placed outside of the <group/>. Inside it we declare the effects we want to use. In this case just <Bloom/> which effects anything with 
 RGB values > 1. This gives us the glow effect on stars and moon
@@ -184,9 +184,9 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
       </Trail>
 
 
-      <AnimatedStar startX={200} startY={30} speedX={80} speedY={9} resetX={-200} />
-      <AnimatedStar startX={300} startY={28} speedX={80} speedY={7} resetX={-320} />
-      <AnimatedStar startX={350} startY={28} speedX={50} speedY={5} resetX={-320} />
+      <StarStreak startX={200} startY={30} speedX={80} speedY={9} resetX={-200} />
+      <StarStreak startX={300} startY={28} speedX={80} speedY={7} resetX={-320} />
+      <StarStreak startX={350} startY={28} speedX={50} speedY={5} resetX={-320} />
 
 
 

@@ -7,7 +7,7 @@ import * as THREE from 'three'
 
 
 
-export default function AnimatedStar({ startX, startY, speedX, speedY, resetX }: { startX: number, startY: number, speedX: number, speedY: number, resetX: number }) {
+export default function StarStreak({ startX, startY, speedX, speedY, resetX }: { startX: number, startY: number, speedX: number, speedY: number, resetX: number }) {
   const starRef = useRef<THREE.Mesh>(null);
   const [resetKey, setResetKey] = useState(0);
 
