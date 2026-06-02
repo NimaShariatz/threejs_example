@@ -4,7 +4,7 @@ import { useEffect, useRef} from 'react'
 import { useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
-import StarStreak from '../stars/starstreak'
+import StarStreak from "../stars/starstreak"
 
 
 
