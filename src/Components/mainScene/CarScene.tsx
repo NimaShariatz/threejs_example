@@ -98,9 +98,6 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
 
   const toonSphere = useRef<THREE.Mesh>(null);
 
-
-
-
   const changeColor = () =>//changes color of cube randomly
   {
     if(toonSphere.current){
@@ -109,10 +106,6 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
       material.color.set(`hsl(${Math.random() * 360}, 100%, 75%)`);
     }//if
   };
-
-
-
-
 
   useEffect(() => {
 
@@ -233,9 +226,6 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
   }, [sectionTracker.moon_finish, scene.background, sectionTracker.car_start, handle_setSectionTracker, car_scene.scene, sectionTracker.car_changeScene]);
 
 
-
-
-
   useFrame((_state, delta) => { //normally it is "state", but we did "_state" to tell TypeScript that it is being intentionally ignored. so npm run deploy works now
     if(carRef.current && KnotsGroupRef.current) {
       carRef.current.rotation.y += delta * 0.2; //rotates the primitive
@@ -243,16 +233,14 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
     }//if
   })
 
-  
+
   
   return(
   <>
     
     <OrbitControls makeDefault/> {/* automatically looks at 0,0,0. Camera animations stop working completely */}
     
-    
     <group position-z={-4.2} position-x={0} position-y={-1}>
-
       <primitive
         ref={carRef}
         object={car_scene.scene}
@@ -346,9 +334,6 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
         >
         <object3D attach="target" position={[0, -5, -3]} />{/* The spotlight will point directly at this position */}
       </spotLight>
-
-
-
     </group>
   </>
   )

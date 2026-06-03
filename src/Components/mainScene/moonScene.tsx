@@ -165,7 +165,6 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
         opacity={1}
       />
 
-
       <mesh ref={moonObject} position-x={7} position-y={ 3 } position-z={ 5 }> {/* notice how i did not use scale={ 1.5 }... */}
         <sphereGeometry args={[1.8, 30, 30]} /> {/* can be done with circleGeometry. Though because of the 20deg camera angle it would look weird*/}
         <meshBasicMaterial ref={moonMaterialRef} color={[1.2, 1.1, 2.3]} toneMapped={false} />{/* Turn off tone mapping and boost the color over 1 so the bloom picks it up */}
@@ -173,8 +172,8 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
 
       <Trail
         width={10}          // Width of the line
-        length={20}           // Length of the trail
-        color={"white"} // Match the star's color
+        length={20}         // Length of the trail
+        color={"white"}     // Match the star's color
         attenuation={(t) => t * t} // Make it taper off at the end
       >
         <mesh ref={star} position-x={ 250 } position-y={ 30 } position-z={ 0 }> {/* z makes it behind the moon */}
@@ -183,13 +182,9 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
         </mesh>
       </Trail>
 
-
       <StarStreak startX={200} startY={30} speedX={80} speedY={9} resetX={-200} />
       <StarStreak startX={300} startY={28} speedX={80} speedY={7} resetX={-320} />
       <StarStreak startX={350} startY={28} speedX={50} speedY={5} resetX={-320} />
-
-
-
     </group>
 
      {/* hit to performance... does unfortunatley effect <Sparkles/> as well. It also effects the colors our .glb models... all of them
@@ -202,8 +197,6 @@ export default function MoonScene({ sectionTracker, handle_setSectionTracker }: 
         mipmapBlur
       />
     </EffectComposer>
-
-
   </>
   )
 }

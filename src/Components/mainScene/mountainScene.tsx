@@ -1,9 +1,7 @@
 import "./mainScene.css"
 import { useEffect, useRef } from 'react'
 import { useGLTF, Html } from "@react-three/drei"
-//import { OrbitControls } from "@react-three/drei"
 import { useThree } from '@react-three/fiber'
-//import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import gsap from 'gsap' // Import GSAP
 
@@ -37,9 +35,6 @@ interface MountainSceneProps {
 
 useGLTF.preload('./mountains.glb');//helps a bit with loading. Occurs on localhost launch, not on component mount.
 //preloaded glb will not be lost even on component dismount. if you want to remove it from RAM, do useGLTF.clear('./mountains.glb') in App.tsx
-
-
-
 
 
 
@@ -150,7 +145,6 @@ export default function MountainScene({ sectionTracker, handle_setSectionTracker
 
   return(
   <>
-
   <group ref={ mountains_ref } position-z={-10} position-x={4} position-y={-2}>
     <primitive
       object={mountains.scene}
@@ -173,12 +167,7 @@ export default function MountainScene({ sectionTracker, handle_setSectionTracker
 
         <small>press 'Enter' to progress</small>
     </Html>
-
   </group>
-      
-        
-
-  
   </>
   )
 }
