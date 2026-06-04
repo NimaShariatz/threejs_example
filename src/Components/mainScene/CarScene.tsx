@@ -111,7 +111,7 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
 
     if(sectionTracker.moon_finish && !sectionTracker.car_start){
 
-      car_scene.scene.traverse((child) => {
+      car_scene.scene.traverse((child) => { //start by setting opacity to 0
         if ((child as THREE.Mesh).isMesh) {
           const mesh = child as THREE.Mesh;
           if (mesh.material) {
@@ -126,7 +126,7 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
 
     if(sectionTracker.car_start){ //now its true so show scene
 
-      car_scene.scene.traverse((child) => {
+      car_scene.scene.traverse((child) => {// animate the opacity of the car to 1
         if ((child as THREE.Mesh).isMesh) {
           const mesh = child as THREE.Mesh;
           if (mesh.material) {
@@ -233,11 +233,10 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
     }//if
   })
 
-
   
   return(
   <>
-    
+
     <OrbitControls makeDefault/> {/* automatically looks at 0,0,0. Camera animations stop working completely */}
     
     <group position-z={-4.2} position-x={0} position-y={-1}>
@@ -317,10 +316,10 @@ export default function CarScene({ sectionTracker, handle_setSectionTracker }: C
       />
 
       <ambientLight
-      ref={ambiLightRef}
-      position={[-2.5, 20, 0.8]} 
-      intensity={20}
-      color={"#171719"} /* crank the color up to the extreme for some funnyness!! */
+        ref={ambiLightRef}
+        position={[-2.5, 20, 0.8]} 
+        intensity={20}
+        color={"#171719"} /* crank the color up to the extreme for some funnyness!! */
       /> {/* no usehelp() from Drei on this one */}
 
 
