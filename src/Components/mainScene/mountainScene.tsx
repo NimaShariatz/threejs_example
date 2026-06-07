@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react'
 import { useGLTF, Html } from "@react-three/drei"
 import { useThree } from '@react-three/fiber'
 import * as THREE from 'three'
-import gsap from 'gsap' // Import GSAP
+import gsap from 'gsap'
 
 /*
 
